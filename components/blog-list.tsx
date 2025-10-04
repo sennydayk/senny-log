@@ -1,0 +1,151 @@
+"use client";
+
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+import type { BlogPost } from "@/lib/posts";
+
+type BlogListProps = {
+  posts: BlogPost[];
+  categories: string[];
+};
+
+export function BlogList({ posts, categories }: BlogListProps) {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const filteredPosts = selectedCategory
+    ? posts.filter((post) => post.category === selectedCategory)
+    : posts;
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="flex">
+        {/* Fixed Left Sidebar */}
+        <aside className="fixed left-0 top-0 h-screen w-64 p-6 border-r border-border bg-background">
+          <div className="flex flex-col h-full">
+            {/* Profile Section */}
+            <div className="mb-8">
+              <div className="mb-4">
+                <div className="w-24 h-24 rounded-full overflow-hidden mb-4 mx-auto">
+                  <Image
+                    src="/profile.png"
+                    alt="Profile"
+                    width={96}
+                    height={96}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <h1 className="text-xl font-bold text-card-foreground font-sans text-center">
+                  sennylog
+                </h1>
+              </div>
+            </div>
+
+            {/* Categories */}
+            <div className="flex-1">
+              <h2 className="text-sm font-semibold text-muted-foreground mb-3 font-sans">
+                Categories
+              </h2>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setSelectedCategory(null)}
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors font-sans text-sm cursor-pointer ${
+                    selectedCategory === null
+                      ? "text-purple-600 dark:text-purple-400 font-semibold"
+                      : "text-card-foreground hover:text-purple-600 dark:hover:text-purple-400"
+                  }`}
+                >
+                  All
+                </button>
+                {categories.map((category) => {
+                  return (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors font-sans text-sm cursor-pointer ${
+                        selectedCategory === category
+                          ? "text-purple-600 dark:text-purple-400 font-semibold"
+                          : "text-card-foreground hover:text-purple-600 dark:hover:text-purple-400"
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="ml-64 flex-1 p-8">
+          <div className="max-w-4xl mx-auto">
+            {/* Category Title */}
+            <h1 className="text-3xl font-bold text-card-foreground font-sans mb-12">
+              {selectedCategory || "All"}
+            </h1>
+
+            <div className="space-y-10">
+              {filteredPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="block group"
+                >
+                  <Card className="overflow-hidden bg-card border-0 rounded-md shadow-none">
+                    <div className="flex h-full">
+                      {/* Thumbnail - 1/3 width */}
+                      <div className="w-1/3 relative bg-muted flex-shrink-0 rounded-l-md overflow-hidden">
+                        <Image
+                          src={post.thumbnail}
+                          alt={post.title}
+                          fill
+                          className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                        />
+                      </div>
+
+                      {/* Content - 2/3 width */}
+                      <div className="flex-1 p-6 flex flex-col justify-center">
+                        <div className="mb-2">
+                          <Badge
+                            variant="secondary"
+                            className="text-xs font-sans mb-2"
+                          >
+                            {post.category}
+                          </Badge>
+                        </div>
+                        <h2 className="text-lg font-semibold text-card-foreground font-sans mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                          {post.title}
+                        </h2>
+                        {post.introduction && (
+                          <p className="text-sm text-muted-foreground font-sans mb-3">
+                            {post.introduction}
+                          </p>
+                        )}
+                        <div className="mt-auto">
+                          <span className="text-xs text-muted-foreground font-sans">
+                            {formatDate(post.date)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}

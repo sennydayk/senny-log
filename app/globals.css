@@ -5,7 +5,7 @@
 
 :root {
   /* Clean black & white color scheme for light mode */
-  --background: #ffffff;
+  --background: #faf9f6;
   --foreground: #000000;
   --card: #ffffff;
   --card-foreground: #000000;
@@ -85,7 +85,8 @@
   /* Updated font configuration to use only Geist */
   --font-sans: var(--font-geist);
   --font-serif: var(--font-geist);
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
