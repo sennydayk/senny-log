@@ -88,3 +88,97 @@ export async function getRecentPostsWithNotion(
   const posts = await getAllPostsWithNotion();
   return posts.slice(0, limit);
 }
+
+// 블로그 활동 통계 타입
+export type CategoryStats = {
+  name: string;
+  count: number;
+  percentage: number;
+};
+
+export type HeatmapData = {
+  date: string;
+  count: number;
+  week: number;
+  day: number;
+  year: number;
+};
+
+export type BlogStats = {
+  totalPosts: number;
+  monthlyPosts: number;
+  categories: CategoryStats[];
+  heatmap: HeatmapData[];
+};
+
+/**
+ * 블로그 활동 통계 가져오기
+ */
+export async function getBlogStats(): Promise<BlogStats> {
+  const posts = await getAllPostsWithNotion();
+  const totalPosts = posts.length;
+
+  // 이번 달 포스트 수 계산
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+  const monthlyPosts = posts.filter((post) => {
+    const postDate = new Date(post.date);
+    return (
+      postDate.getMonth() === currentMonth &&
+      postDate.getFullYear() === currentYear
+    );
+  }).length;
+
+  // 카테고리별 통계 계산
+  const categoryMap = new Map<string, number>();
+  posts.forEach((post) => {
+    const count = categoryMap.get(post.category) || 0;
+    categoryMap.set(post.category, count + 1);
+  });
+
+  const categories: CategoryStats[] = Array.from(categoryMap.entries())
+    .map(([name, count]) => ({
+      name,
+      count,
+      percentage: totalPosts > 0 ? Math.round((count / totalPosts) * 100) : 0,
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  // 히트맵 데이터 생성 (최근 1년, 52주)
+  const heatmap: HeatmapData[] = [];
+  const totalDays = 365; // 1년
+
+  // 1년치 날짜별 데이터 생성
+  for (let i = totalDays - 1; i >= 0; i--) {
+    const date = new Date(now);
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().split("T")[0];
+    const year = date.getFullYear();
+    const dayOfWeek = date.getDay(); // 0(일) ~ 6(토)
+
+    // 연초부터의 주차 계산
+    const startOfYear = new Date(year, 0, 1);
+    const daysSinceStart = Math.floor(
+      (date.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    const week = Math.floor(daysSinceStart / 7);
+
+    const count = posts.filter((post) => post.date === dateStr).length;
+
+    heatmap.push({
+      date: dateStr,
+      count,
+      week,
+      day: dayOfWeek,
+      year,
+    });
+  }
+
+  return {
+    totalPosts,
+    monthlyPosts,
+    categories,
+    heatmap,
+  };
+}
