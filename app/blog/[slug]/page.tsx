@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { getPostBySlugWithNotion } from "@/lib/posts";
 import { MarkdownContent } from "@/components/markdown-content";
+import { TableOfContents } from "@/components/table-of-contents";
 import { Calendar, ArrowLeft } from "lucide-react";
 
 type BlogPostPageProps = {
@@ -31,7 +32,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Navigation */}
         <Link
           href="/blog"
@@ -41,29 +42,46 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           Back to all posts
         </Link>
 
-        {/* Article Header */}
-        <header className="mb-12">
-          <div className="flex items-center gap-2 mb-4">
-            <Badge variant="secondary" className="text-xs font-sans">
-              {post.category}
-            </Badge>
-            <span className="text-sm text-muted-foreground font-sans flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
-              {formatDate(post.date)}
-            </span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-card-foreground mb-4 font-sans leading-tight">
-            {post.title}
-          </h1>
-          <p className="text-lg text-muted-foreground font-sans">
-            {post.summary}
-          </p>
-        </header>
+        <div className="flex gap-12">
+          {/* Main Content */}
+          <div className="flex-1 min-w-0 max-w-4xl">
+            {/* Article Header */}
+            <header className="mb-12">
+              <div className="flex items-center gap-2 mb-4">
+                <Badge variant="secondary" className="text-xs font-sans">
+                  {post.category}
+                </Badge>
+                <span className="text-sm text-muted-foreground font-sans flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  {formatDate(post.date)}
+                </span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-card-foreground mb-4 font-sans leading-tight">
+                {post.title}
+              </h1>
+              <p className="text-lg text-muted-foreground font-sans">
+                {post.summary}
+              </p>
+            </header>
 
-        {/* Article Content */}
-        <article className="prose prose-lg dark:prose-invert max-w-none">
-          <MarkdownContent content={post.content} />
-        </article>
+            {/* Table of Contents - Mobile */}
+            <div className="xl:hidden mb-8 p-6 border border-border rounded-lg bg-card/50">
+              <TableOfContents content={post.content} />
+            </div>
+
+            {/* Article Content */}
+            <article className="prose prose-lg dark:prose-invert max-w-none">
+              <MarkdownContent content={post.content} />
+            </article>
+          </div>
+
+          {/* Table of Contents - Desktop */}
+          <aside className="hidden xl:block w-64 shrink-0">
+            <div className="sticky top-24">
+              <TableOfContents content={post.content} />
+            </div>
+          </aside>
+        </div>
       </div>
     </div>
   );

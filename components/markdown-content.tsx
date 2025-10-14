@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -10,26 +11,85 @@ type MarkdownContentProps = {
   content: string;
 };
 
+// 마크다운 콘텐츠에서 모든 헤딩을 미리 파싱하여 ID 매핑 생성
+function createHeadingIdMap(content: string): Map<string, string> {
+  const headingRegex = /^(#{1,3})\s+(.+)$/gm;
+  const idMap = new Map<string, string>();
+  const idCounts = new Map<string, number>();
+  let match;
+
+  while ((match = headingRegex.exec(content)) !== null) {
+    const text = match[2].trim();
+    const baseId = text
+      .toLowerCase()
+      .replace(/[^a-z0-9가-힣\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .trim();
+
+    // 중복된 ID가 있으면 숫자를 붙여서 고유하게 만들기
+    const count = idCounts.get(baseId) || 0;
+    const uniqueId = count === 0 ? baseId : `${baseId}-${count + 1}`;
+    idCounts.set(baseId, count + 1);
+
+    // 원본 텍스트를 key로 하여 고유 ID 저장
+    idMap.set(text, uniqueId);
+  }
+
+  return idMap;
+}
+
 export function MarkdownContent({ content }: MarkdownContentProps) {
+  // 콘텐츠가 변경될 때만 ID 매핑 재생성
+  const headingIdMap = useMemo(() => createHeadingIdMap(content), [content]);
+
+  // 헤딩 텍스트로부터 ID를 가져오는 헬퍼 함수
+  const getHeadingId = (children: React.ReactNode): string => {
+    const text = String(children);
+    return headingIdMap.get(text) || text
+      .toLowerCase()
+      .replace(/[^a-z0-9가-힣\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .trim();
+  };
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       components={{
-        h1: ({ children }) => (
-          <h1 className="text-4xl font-bold text-card-foreground mb-6 mt-8 first:mt-0 font-sans">
-            {children}
-          </h1>
-        ),
-        h2: ({ children }) => (
-          <h2 className="text-3xl font-semibold text-card-foreground mb-4 mt-8 font-sans">
-            {children}
-          </h2>
-        ),
-        h3: ({ children }) => (
-          <h3 className="text-2xl font-semibold text-card-foreground mb-3 mt-6 font-sans">
-            {children}
-          </h3>
-        ),
+        h1: ({ children }) => {
+          const id = getHeadingId(children);
+          return (
+            <h1
+              id={id}
+              className="text-4xl font-bold text-card-foreground mb-6 mt-8 first:mt-0 font-sans scroll-mt-20"
+            >
+              {children}
+            </h1>
+          );
+        },
+        h2: ({ children }) => {
+          const id = getHeadingId(children);
+          return (
+            <h2
+              id={id}
+              className="text-3xl font-semibold text-card-foreground mb-4 mt-8 font-sans scroll-mt-20"
+            >
+              {children}
+            </h2>
+          );
+        },
+        h3: ({ children }) => {
+          const id = getHeadingId(children);
+          return (
+            <h3
+              id={id}
+              className="text-2xl font-semibold text-card-foreground mb-3 mt-6 font-sans scroll-mt-20"
+            >
+              {children}
+            </h3>
+          );
+        },
         p: ({ children }) => (
           <p className="text-base text-card-foreground leading-7 mb-4 font-sans">
             {children}
@@ -54,7 +114,12 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
               </SyntaxHighlighter>
             </div>
           ) : (
-            <code className="px-1.5 py-0.5 rounded bg-muted text-sm font-mono text-card-foreground">
+            <code
+              className="px-1.5 py-0.5 rounded text-sm font-mono text-primary dark:text-[#C678DC]"
+              style={{
+                backgroundColor: "var(--inline-code-bg)",
+              }}
+            >
               {children}
             </code>
           );

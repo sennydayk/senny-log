@@ -12,6 +12,7 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
   const [activeTab, setActiveTab] = useState<"heatmap" | "categories">(
     "heatmap"
   );
+  const [isMounted, setIsMounted] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [countUp, setCountUp] = useState({ total: 0, monthly: 0 });
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
@@ -22,10 +23,12 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
     new Set(stats.heatmap.map((d) => d.year))
   ).sort((a, b) => b - a);
   const [selectedYear, setSelectedYear] = useState<number>(
-    availableYears[0] || new Date().getFullYear()
+    availableYears[0] || 2025
   );
 
+  // 클라이언트 마운트 체크
   useEffect(() => {
+    setIsMounted(true);
     setIsLoaded(true);
 
     // 카운트업 애니메이션
@@ -84,6 +87,26 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
     ];
     return colors[index % colors.length];
   };
+
+  // 클라이언트 마운트 전에는 기본 레이아웃만 표시
+  if (!isMounted) {
+    return (
+      <div className="w-full">
+        <div className="mt-3 mb-4">
+          <h3 className="text-md font-bold text-card-foreground mb-1 font-sans">
+            Blog Activity
+          </h3>
+          <p className="text-xs text-muted-foreground font-sans">
+            최근 작성 활동과 카테고리 현황
+          </p>
+        </div>
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-muted/20 rounded" />
+          <div className="h-32 bg-muted/20 rounded" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">

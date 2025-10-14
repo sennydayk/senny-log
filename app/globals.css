@@ -5,7 +5,7 @@
 
 :root {
   /* Clean black & white color scheme for light mode */
-  --background: #faf9f6;
+  --background: #ffffff;
   --foreground: #000000;
   --card: #ffffff;
   --card-foreground: #000000;
@@ -40,6 +40,8 @@
   --sidebar-accent-foreground: #000000;
   --sidebar-border: #e5e5e5;
   --sidebar-ring: rgba(0, 0, 0, 0.2);
+  /* Inline code background color */
+  --inline-code-bg: #f0f1f2;
 }
 
 .dark {
@@ -79,6 +81,8 @@
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #262626;
   --sidebar-ring: rgba(255, 255, 255, 0.2);
+  /* Inline code background color for dark mode */
+  --inline-code-bg: #282C34;
 }
 
 @theme inline {
