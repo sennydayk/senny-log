@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import type { BlogPost } from "@/lib/posts";
+import type { BlogPostMetadata } from "@/lib/posts";
 
 type RecentPostsCardProps = {
-  posts: BlogPost[];
+  posts: BlogPostMetadata[];
 };
 
 export function RecentPostsCard({ posts }: RecentPostsCardProps) {
@@ -53,7 +53,7 @@ export function RecentPostsCard({ posts }: RecentPostsCardProps) {
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold font-sans mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                <h4 className="font-semibold font-sans mb-1 group-hover:text-primary dark:group-hover:text-primary transition-colors">
                   {post.title}
                 </h4>
                 {post.introduction && (

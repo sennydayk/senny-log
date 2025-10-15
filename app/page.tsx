@@ -14,12 +14,12 @@ import {
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 import Image from "next/image";
-import { getRecentPostsWithNotion, getBlogStats } from "@/lib/posts";
+import { getRecentPostsMetadata, getBlogStats } from "@/lib/posts";
 import { RecentPostsCard } from "@/components/recent-posts-card";
 import { BlogActivityDashboard } from "@/components/blog-activity-dashboard";
 
 export default async function Portfolio() {
-  const recentPosts = await getRecentPostsWithNotion(3);
+  const recentPosts = await getRecentPostsMetadata(3);
   const blogStats = await getBlogStats();
 
   const techStack = [
@@ -82,7 +82,7 @@ export default async function Portfolio() {
                   href="https://your-resume-url.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 mb-3 text-card-foreground hover:text-purple-600 dark:hover:text-purple-400 w-fit hover:translate-x-1 transition-all duration-200"
+                  className="flex items-center gap-2 mb-3 text-card-foreground hover:text-primary dark:hover:text-primary w-fit hover:translate-x-1 transition-all duration-200"
                 >
                   <FileText className="w-4 h-4" />
                   <span className="text-sm font-sans font-medium">Resume</span>

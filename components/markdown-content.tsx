@@ -152,7 +152,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
         a: ({ href, children }) => (
           <a
             href={href}
-            className="text-purple-600 dark:text-purple-400 hover:underline font-sans"
+            className="text-primary dark:text-primary hover:underline font-sans"
             target="_blank"
             rel="noopener noreferrer"
           >

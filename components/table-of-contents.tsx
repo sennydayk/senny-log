@@ -105,10 +105,10 @@ export function TableOfContents({ content }: TableOfContentsProps) {
             <button
               onClick={() => handleClick(id)}
               className={`
-                text-left w-full transition-colors hover:text-primary dark:hover:text-purple-400 font-sans
+                text-left w-full transition-colors hover:text-primary dark:hover:text-primary font-sans
                 ${
                   activeId === id
-                    ? "text-primary dark:text-purple-400 font-bold"
+                    ? "text-primary dark:text-primary font-bold"
                     : "text-muted-foreground cursor-pointer"
                 }
               `}

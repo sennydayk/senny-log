@@ -36,7 +36,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         {/* Navigation */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-purple-600 dark:hover:text-purple-400 transition-colors font-sans mb-8"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary dark:hover:text-primary transition-colors font-sans mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to all posts

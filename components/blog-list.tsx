@@ -5,10 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import type { BlogPost } from "@/lib/posts";
+import type { BlogPostMetadata } from "@/lib/posts";
 
 type BlogListProps = {
-  posts: BlogPost[];
+  posts: BlogPostMetadata[];
   categories: string[];
 };
 
@@ -61,8 +61,8 @@ export function BlogList({ posts, categories }: BlogListProps) {
                   onClick={() => setSelectedCategory(null)}
                   className={`w-full text-left px-3 py-2 rounded-lg transition-colors font-sans text-sm cursor-pointer ${
                     selectedCategory === null
-                      ? "text-purple-600 dark:text-purple-400 font-semibold"
-                      : "text-card-foreground hover:text-purple-600 dark:hover:text-purple-400"
+                      ? "text-primary dark:text-primary font-semibold"
+                      : "text-card-foreground hover:text-primary dark:hover:text-primary"
                   }`}
                 >
                   All
@@ -74,8 +74,8 @@ export function BlogList({ posts, categories }: BlogListProps) {
                       onClick={() => setSelectedCategory(category)}
                       className={`w-full text-left px-3 py-2 rounded-lg transition-colors font-sans text-sm cursor-pointer ${
                         selectedCategory === category
-                          ? "text-purple-600 dark:text-purple-400 font-semibold"
-                          : "text-card-foreground hover:text-purple-600 dark:hover:text-purple-400"
+                          ? "text-primary dark:text-primary font-semibold"
+                          : "text-card-foreground hover:text-primary dark:hover:text-primary"
                       }`}
                     >
                       {category}
@@ -103,7 +103,7 @@ export function BlogList({ posts, categories }: BlogListProps) {
                   className="block group"
                 >
                   <Card className="overflow-hidden bg-card border-0 rounded-md shadow-none">
-                    <div className="flex h-full">
+                    <div className="flex h-52">
                       {/* Thumbnail - 1/3 width */}
                       <div className="w-1/3 relative bg-muted flex-shrink-0 rounded-l-md overflow-hidden">
                         <Image
@@ -124,7 +124,7 @@ export function BlogList({ posts, categories }: BlogListProps) {
                             {post.category}
                           </Badge>
                         </div>
-                        <h2 className="text-lg font-semibold text-card-foreground font-sans mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                        <h2 className="text-lg font-semibold text-card-foreground font-sans mb-2 group-hover:text-primary dark:group-hover:text-primary transition-colors">
                           {post.title}
                         </h2>
                         {post.introduction && (
