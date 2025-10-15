@@ -159,6 +159,32 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
             {children}
           </a>
         ),
+        table: ({ children }) => (
+          <div className="my-6 w-full overflow-x-auto">
+            <table className="w-full border-collapse border border-border">
+              {children}
+            </table>
+          </div>
+        ),
+        thead: ({ children }) => (
+          <thead className="bg-secondary">{children}</thead>
+        ),
+        tbody: ({ children }) => (
+          <tbody className="divide-y divide-border">{children}</tbody>
+        ),
+        tr: ({ children }) => (
+          <tr className="border-b border-border">{children}</tr>
+        ),
+        th: ({ children }) => (
+          <th className="border border-border px-4 py-2 text-left font-semibold text-card-foreground font-sans bg-secondary">
+            {children}
+          </th>
+        ),
+        td: ({ children }) => (
+          <td className="border border-border px-4 py-2 text-left text-card-foreground font-sans">
+            {children}
+          </td>
+        ),
       }}
     >
       {content}
