@@ -88,13 +88,19 @@ export function BlogList({ posts, categories }: BlogListProps) {
         </aside>
 
         {/* Main Content */}
-        <main className="ml-64 flex-1 p-8">
-          <div className="max-w-4xl mx-auto">
-            {/* Category Title */}
-            <h1 className="text-3xl font-bold text-card-foreground font-sans mb-12">
-              {selectedCategory || "All"}
-            </h1>
+        <main className="ml-64 flex-1">
+          {/* Fixed Category Header */}
+          <div className="sticky top-0 z-10 bg-background">
+            <div className="max-w-4xl mx-auto px-8 py-6">
+              <h1 className="text-3xl font-bold text-card-foreground font-sans flex items-end gap-2">
+                <span>{selectedCategory || "All"}</span>
+                <span className="w-3 h-3 rounded-full bg-[#b8a0d9] flex-shrink-0 mb-1.5" />
+              </h1>
+            </div>
+          </div>
 
+          {/* Posts List */}
+          <div className="max-w-4xl mx-auto px-8 py-8">
             <div className="space-y-10">
               {filteredPosts.map((post) => (
                 <Link

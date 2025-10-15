@@ -16,17 +16,17 @@ export function RecentPostsCard({ posts }: RecentPostsCardProps) {
   return (
     <Card
       id="blog"
-      className="md:col-span-2 lg:col-span-3 p-6 pb-8 bg-card border border-border relative overflow-hidden rounded-2xl shadow-none"
+      className="md:col-span-2 lg:col-span-3 p-6 pb-8 bg-[#7657fe] border border-border relative overflow-hidden rounded-2xl shadow-none"
     >
       <div className="flex items-center justify-between">
-        <h3 className="font-bold text-card-foreground font-sans">
+        <h3 className="font-bold text-white font-sans">
           Recent Posts
         </h3>
         <Link href="/blog">
           <Button
             variant="ghost"
             size="sm"
-            className="font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="font-sans font-bold text-sm text-white hover:text-white/80 transition-colors"
           >
             View All Posts
             <ArrowRight className="w-4 h-4 ml-1" />
@@ -53,15 +53,15 @@ export function RecentPostsCard({ posts }: RecentPostsCardProps) {
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold font-sans mb-1 group-hover:text-primary dark:group-hover:text-primary transition-colors">
+                <h4 className="font-extrabold font-sans mb-1 text-white group-hover:text-white/80 transition-colors">
                   {post.title}
                 </h4>
                 {post.introduction && (
-                  <p className="text-sm text-muted-foreground mb-2 font-sans line-clamp-2">
+                  <p className="text-sm font-bold text-white/80 mb-2 font-sans line-clamp-2">
                     {post.introduction}
                   </p>
                 )}
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-2 font-semibold text-xs text-white/70">
                   <Calendar className="w-3 h-3" />
                   <span className="font-sans">
                     {new Date(post.date).toLocaleDateString("en-US", {
@@ -72,7 +72,7 @@ export function RecentPostsCard({ posts }: RecentPostsCardProps) {
                   </span>
                   <Badge
                     variant="outline"
-                    className="text-xs font-sans rounded-full ml-2"
+                    className="text-xs font-sans rounded-full ml-2 text-white border-white/30"
                   >
                     {post.category}
                   </Badge>
