@@ -18,9 +18,13 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
   const heatmapScrollRef = useRef<HTMLDivElement>(null);
 
-  // 연도별 필터링
+  // 연도별 필터링 (실제 포스트가 있는 연도만)
   const availableYears = Array.from(
-    new Set(stats.heatmap.map((d) => d.year))
+    new Set(
+      stats.heatmap
+        .filter((d) => d.count > 0)
+        .map((d) => d.year)
+    )
   ).sort((a, b) => b - a);
   const [selectedYear, setSelectedYear] = useState<number>(
     availableYears[0] || 2025
@@ -71,8 +75,7 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
   }, [activeTab, selectedYear]);
 
   const getHeatmapColor = (count: number) => {
-    // 깃허브 잔디와 유사한 색상 (보라색 계열)
-    if (count === 0) return "#ebedf0"; // 연한 회색 (항상 보임)
+    if (count === 0) return "#d1d5db"; // 회색
     if (count === 1) return "#c084fc"; // 연한 보라색
     if (count === 2) return "#9333ea"; // 중간 보라색
     return "#7e22ce"; // 진한 보라색
@@ -93,10 +96,10 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
     return (
       <div className="w-full">
         <div className="mt-3 mb-4">
-          <h3 className="text-md font-bold text-card-foreground mb-1 font-sans">
+          <h3 className="text-md font-bold text-black mb-1 font-sans">
             Blog Activity
           </h3>
-          <p className="text-xs text-muted-foreground font-sans">
+          <p className="text-xs text-[#525252] font-sans">
             최근 작성 활동과 카테고리 현황
           </p>
         </div>
@@ -112,22 +115,22 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
     <div className="w-full">
       {/* 헤더 */}
       <div className="mt-3 mb-4">
-        <h3 className="text-md font-bold text-card-foreground mb-1 font-sans">
+        <h3 className="text-md font-bold text-black mb-1 font-sans">
           Blog Activity
         </h3>
-        <p className="text-xs text-muted-foreground font-sans">
+        {/* <p className="text-xs text-[#525252] font-sans">
           최근 작성 활동과 카테고리 현황
-        </p>
+        </p> */}
       </div>
 
       {/* 탭 */}
       <div className="flex gap-2 mb-4">
         <button
           onClick={() => setActiveTab("heatmap")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all font-sans ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs transition-all font-sans text-[#525252] ${
             activeTab === "heatmap"
-              ? "bg-primary text-primary-foreground shadow-sm"
-              : "text-muted-foreground cursor-pointer"
+              ? "font-extrabold"
+              : "font-medium cursor-pointer"
           }`}
         >
           <TrendingUp className="w-3 h-3" />
@@ -135,10 +138,10 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
         </button>
         <button
           onClick={() => setActiveTab("categories")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all font-sans ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs transition-all font-sans text-[#525252] ${
             activeTab === "categories"
-              ? "bg-primary text-primary-foreground shadow-sm"
-              : "text-muted-foreground cursor-pointer"
+              ? "font-extrabold"
+              : "font-medium cursor-pointer"
           }`}
         >
           <BarChart3 className="w-3 h-3" />
@@ -153,7 +156,7 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
             {/* 통계 */}
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-primary/5 rounded-lg p-3">
-                <div className="text-xs text-muted-foreground mb-1 font-sans">
+                <div className="text-xs text-[#525252] mb-1 font-sans">
                   Total Posts
                 </div>
                 <div className="text-2xl font-bold text-primary font-sans">
@@ -161,7 +164,7 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
                 </div>
               </div>
               <div className="bg-primary/5 rounded-lg p-3">
-                <div className="text-xs text-muted-foreground mb-1 font-sans">
+                <div className="text-xs text-[#525252] mb-1 font-sans">
                   This Month
                 </div>
                 <div className="text-2xl font-bold text-primary font-sans flex items-center gap-1">
@@ -177,10 +180,10 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
                   <button
                     key={year}
                     onClick={() => setSelectedYear(year)}
-                    className={`px-2.5 py-1 rounded text-xs font-medium transition-all font-sans ${
+                    className={`px-2.5 py-1 rounded text-xs transition-all font-sans ${
                       selectedYear === year
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground cursor-pointer"
+                        ? "font-bold text-primary"
+                        : "font-medium text-[#525252] cursor-pointer"
                     }`}
                   >
                     {year}
@@ -193,7 +196,7 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
             <div className="relative">
               <div className="flex items-start gap-2">
                 {/* 연도 레이블 */}
-                <div className="text-xs font-medium text-muted-foreground pt-1 font-sans w-10 flex-shrink-0">
+                <div className="text-xs font-medium text-[#525252] pt-1 font-sans w-10 flex-shrink-0">
                   {selectedYear}
                 </div>
 
@@ -277,7 +280,7 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
               </div>
 
               {/* 범례 */}
-              <div className="flex items-center justify-end gap-2 mt-3 text-xs text-muted-foreground font-sans">
+              <div className="flex items-center justify-end gap-2 mt-3 text-xs text-[#525252] font-sans">
                 <span>Less</span>
                 <div className="flex gap-0.5">
                   {[0, 1, 2, 3].map((level) => (
@@ -298,7 +301,7 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
         ) : (
           <div className="space-y-3">
             {stats.categories.length === 0 ? (
-              <p className="text-xs text-muted-foreground text-center py-4 font-sans">
+              <p className="text-xs text-[#525252] text-center py-4 font-sans">
                 아직 작성된 글이 없습니다.
               </p>
             ) : (
@@ -319,7 +322,7 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
                       className="w-3 h-3 rounded-full shadow-sm"
                       style={{ backgroundColor: getCategoryColor(index) }}
                     />
-                    <span className="font-medium text-card-foreground text-sm font-sans">
+                    <span className="font-medium text-black text-sm font-sans">
                       {category.name}
                     </span>
                   </div>
@@ -334,7 +337,7 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
                         }}
                       />
                     </div>
-                    <span className="text-xs font-bold text-muted-foreground w-6 text-right font-sans">
+                    <span className="text-xs font-bold text-[#525252] w-6 text-right font-sans">
                       {category.count}
                     </span>
                   </div>

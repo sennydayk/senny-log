@@ -19,17 +19,20 @@ export function RecentPostsCard({ posts }: RecentPostsCardProps) {
       className="md:col-span-2 lg:col-span-3 p-6 pb-8 bg-[#7657fe] border border-border relative overflow-hidden rounded-2xl shadow-none"
     >
       <div className="flex items-center justify-between">
-        <h3 className="font-bold text-white font-sans">
-          Recent Posts
-        </h3>
+        <div className="flex items-center gap-3">
+          <div className="w-3 h-3 rounded-full bg-[#6acdff] animate-pulse"></div>
+          <h3 className="font-extrabold text-white font-sans">
+            Recent Posts
+          </h3>
+        </div>
         <Link href="/blog">
           <Button
             variant="ghost"
             size="sm"
-            className="font-sans font-bold text-sm text-white hover:text-white/80 transition-colors"
+            className="font-sans font-bold text-sm text-white hover:cursor-pointer group"
           >
             View All Posts
-            <ArrowRight className="w-4 h-4 ml-1" />
+            <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-2 transition-all duration-200" />
           </Button>
         </Link>
       </div>
@@ -61,7 +64,7 @@ export function RecentPostsCard({ posts }: RecentPostsCardProps) {
                     {post.introduction}
                   </p>
                 )}
-                <div className="flex items-center gap-2 font-semibold text-xs text-white/70">
+                <div className="flex items-center gap-2 font-bold text-xs text-white/70">
                   <Calendar className="w-3 h-3" />
                   <span className="font-sans">
                     {new Date(post.date).toLocaleDateString("en-US", {
@@ -72,7 +75,7 @@ export function RecentPostsCard({ posts }: RecentPostsCardProps) {
                   </span>
                   <Badge
                     variant="outline"
-                    className="text-xs font-sans rounded-full ml-2 text-white border-white/30"
+                    className="text-xs font-sans font-bold rounded-full ml-2 text-white border-white/30"
                   >
                     {post.category}
                   </Badge>
