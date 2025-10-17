@@ -14,12 +14,12 @@ import {
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 import Image from "next/image";
-import { getRecentPostsWithNotion, getBlogStats } from "@/lib/posts";
+import { getRecentPostsMetadata, getBlogStats } from "@/lib/posts";
 import { RecentPostsCard } from "@/components/recent-posts-card";
 import { BlogActivityDashboard } from "@/components/blog-activity-dashboard";
 
 export default async function Portfolio() {
-  const recentPosts = await getRecentPostsWithNotion(3);
+  const recentPosts = await getRecentPostsMetadata(3);
   const blogStats = await getBlogStats();
 
   const techStack = [
@@ -44,7 +44,7 @@ export default async function Portfolio() {
           {/* About Me - Tall Card (Top Left) */}
           <Card
             id="about"
-            className="md:col-span-2 lg:col-span-2 md:row-span-2 p-6 bg-card border border-border relative overflow-hidden rounded-2xl shadow-none"
+            className="md:col-span-2 lg:col-span-2 md:row-span-2 p-6 bg-[#a7ec0a] border border-border relative overflow-hidden rounded-2xl shadow-none"
           >
             <div className="flex flex-col h-full relative z-10">
               <div className="flex items-center gap-4 mb-4">
@@ -58,10 +58,10 @@ export default async function Portfolio() {
                   />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-card-foreground font-sans">
+                  <h2 className="text-xl font-extrabold text-black font-sans">
                     Kim Seyeon
                   </h2>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                  <div className="flex items-center gap-2 text-sm font-bold text-[#525252] mt-1">
                     <MapPin className="w-4 h-4" />
                     <span className="font-sans">대한민국, 서울</span>
                   </div>
@@ -69,7 +69,7 @@ export default async function Portfolio() {
               </div>
 
               {/* Blog Activity Dashboard */}
-              <div className="pb-4 mb-4 border-b border-t border-border">
+              <div className="pb-4 mb-4 border-b border-t border-[#262626]">
                 <BlogActivityDashboard stats={blogStats} />
               </div>
 
@@ -82,7 +82,7 @@ export default async function Portfolio() {
                   href="https://your-resume-url.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 mb-3 text-card-foreground hover:text-purple-600 dark:hover:text-purple-400 w-fit hover:translate-x-1 transition-all duration-200"
+                  className="flex items-center gap-2 mb-3 text-black hover:text-primary w-fit hover:translate-x-1 transition-all duration-200"
                 >
                   <FileText className="w-4 h-4" />
                   <span className="text-sm font-sans font-medium">Resume</span>
@@ -93,7 +93,7 @@ export default async function Portfolio() {
                   <Badge
                     key={tech}
                     variant="secondary"
-                    className="font-sans text-xs rounded-full"
+                    className="font-sans text-xs rounded-full bg-[#1a1a1a] text-white border-transparent"
                   >
                     {tech}
                   </Badge>
@@ -106,47 +106,47 @@ export default async function Portfolio() {
           <RecentPostsCard posts={recentPosts} />
 
           {/* Status - Square Card (Top Right) */}
-          <Card className="md:col-span-1 p-6 bg-card border border-border relative overflow-hidden rounded-2xl shadow-none">
+          <Card className="md:col-span-1 p-6 bg-[#6acdff] border border-border relative overflow-hidden rounded-2xl shadow-none">
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-3 h-3 rounded-full bg-primary animate-pulse"></div>
-                <h3 className="font-semibold text-card-foreground font-sans">
+                <h3 className="font-extrabold text-black font-sans">
                   Available
                 </h3>
               </div>
-              <p className="text-sm text-muted-foreground mb-4 font-sans">
+              <p className="text-sm font-bold text-[#525252] mb-4 font-sans">
                 Open to new opportunities
               </p>
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-muted-foreground font-sans mb-1">
+                  <p className="text-sm font-bold text-[#525252] font-sans mb-1">
                     Role
                   </p>
-                  <p className="font-semibold text-card-foreground font-sans">
+                  <p className="font-bold text-black font-sans">
                     Frontend Developer 👩🏻‍💻
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground font-sans mb-1">
+                  <p className="text-sm font-bold text-[#525252] font-sans mb-1">
                     Projects
                   </p>
-                  <p className="font-semibold text-card-foreground font-sans">
+                  <p className="font-bold text-black font-sans">
                     8+
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground font-sans mb-1">
+                  <p className="text-sm font-bold text-[#525252] font-sans mb-1">
                     Projects
                   </p>
-                  <p className="font-semibold text-card-foreground font-sans">
+                  <p className="font-bold text-black font-sans">
                     8+
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground font-sans mb-1">
+                  <p className="text-sm font-bold text-[#525252] font-sans mb-1">
                     Experience
                   </p>
-                  <p className="font-semibold text-card-foreground font-sans">
+                  <p className="font-bold text-black font-sans">
                     1 years
                   </p>
                 </div>
@@ -157,40 +157,40 @@ export default async function Portfolio() {
           {/* Social Links - Square Card (Bottom Left) */}
           <Card
             id="contact"
-            className="md:col-span-1 p-6 bg-card border border-border relative overflow-hidden rounded-2xl shadow-none"
+            className="md:col-span-1 p-6 bg-[#9bd9f8] border border-border relative overflow-hidden rounded-2xl shadow-none"
           >
             <div className="relative z-10">
-              <h3 className="font-semibold text-card-foreground mb-4 font-sans">
+              <h3 className="font-extrabold text-black mb-4 font-sans">
                 Connect
               </h3>
               <div className="space-y-3">
                 <a
                   href="#"
-                  className="flex items-center gap-3 text-card-foreground hover:text-primary hover:translate-x-1 transition-all duration-200"
+                  className="flex items-center gap-3 text-black hover:text-primary hover:font-extrabold hover:translate-x-1 transition-all duration-200"
                 >
                   <Github className="w-4 h-4" />
-                  <span className="text-sm font-sans">GitHub</span>
+                  <span className="text-sm font-semibold font-sans">GitHub</span>
                 </a>
                 <a
                   href="#"
-                  className="flex items-center gap-3 text-card-foreground hover:text-primary hover:translate-x-1 transition-all duration-200"
+                  className="flex items-center gap-3 text-black hover:text-primary hover:translate-x-1 transition-all duration-200"
                 >
                   <Linkedin className="w-4 h-4" />
-                  <span className="text-sm font-sans">LinkedIn</span>
+                  <span className="text-sm font-semibold font-sans">LinkedIn</span>
                 </a>
                 {/* <a
                   href="#"
-                  className="flex items-center gap-3 text-card-foreground hover:text-primary hover:translate-x-1 transition-all duration-200"
+                  className="flex items-center gap-3 text-black hover:text-primary hover:translate-x-1 transition-all duration-200"
                 >
                   <Twitter className="w-4 h-4" />
                   <span className="text-sm font-sans">Twitter</span>
                 </a> */}
                 <a
                   href="#"
-                  className="flex items-center gap-3 text-card-foreground hover:text-primary hover:translate-x-1 transition-all duration-200"
+                  className="flex items-center gap-3 text-black hover:text-primary hover:translate-x-1 transition-all duration-200"
                 >
                   <Mail className="w-4 h-4" />
-                  <span className="text-sm font-sans">Email</span>
+                  <span className="text-sm font-semibold font-sans">Email</span>
                 </a>
               </div>
             </div>
@@ -199,39 +199,39 @@ export default async function Portfolio() {
           {/* Experience moved to bottom row */}
           <Card
             id="experience"
-            className="md:col-span-2 lg:col-span-3 p-6 bg-card border border-border relative overflow-hidden rounded-2xl shadow-none"
+            className="md:col-span-2 lg:col-span-3 p-6 bg-[#ff3299] border border-border relative overflow-hidden rounded-2xl shadow-none"
           >
             <div className="relative z-10">
-              <h3 className="font-bold text-card-foreground mb-4 font-sans">
+              <h3 className="font-extrabold text-white mb-4 font-sans">
                 Experience
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-primary font-sans">
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs font-bold text-white font-sans">
                       RE
                     </span>
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-card-foreground font-sans text-sm">
+                    <h4 className="font-bold text-white font-sans text-sm">
                       Frontend Developer
                     </h4>
-                    <p className="text-xs text-muted-foreground font-sans">
+                    <p className="text-xs font-bold text-white/80 font-sans">
                       RushEight Inc. • 2025 - Present
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-primary font-sans">
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs font-bold text-white font-sans">
                       ST
                     </span>
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-card-foreground font-sans text-sm">
+                    <h4 className="font-bold text-white font-sans text-sm">
                       Full Stack Developer
                     </h4>
-                    <p className="text-xs text-muted-foreground font-sans">
+                    <p className="text-xs font-bold text-white/80 font-sans">
                       StartupXYZ • 2020 - 2022
                     </p>
                   </div>

@@ -10,6 +10,9 @@ export type BlogPost = {
   thumbnail: string;
 };
 
+// 메타데이터 타입 re-export
+export type { BlogPostMetadata } from "./notion";
+
 // 로컬 포스트는 노션 연동 후 비활성화
 const BLOG_POSTS: BlogPost[] = [];
 
@@ -19,9 +22,36 @@ function sortByDateDesc(a: BlogPost, b: BlogPost): number {
   return timeB - timeA;
 }
 
+function sortMetadataByDateDesc(
+  a: { date: string },
+  b: { date: string }
+): number {
+  const timeA = new Date(a.date).getTime();
+  const timeB = new Date(b.date).getTime();
+  return timeB - timeA;
+}
+
 /**
- * 노션과 로컬 포스트를 통합하여 반환
- * 노션 API 사용 시 서버 컴포넌트에서만 호출 가능
+ * 노션과 로컬 포스트의 메타데이터만 반환 (content 제외)
+ * 목록 페이지 등에서 사용 - 빠른 성능
+ */
+export async function getAllPostsMetadata(): Promise<import("./notion").BlogPostMetadata[]> {
+  // 노션 API가 설정되어 있으면 노션에서 가져오기
+  if (process.env.NOTION_API_KEY && process.env.NOTION_DATABASE_ID) {
+    const { getNotionPostsMetadata } = await import("./notion");
+    const notionPosts = await getNotionPostsMetadata();
+    // 로컬 포스트를 메타데이터 형식으로 변환
+    const localMetadata = BLOG_POSTS.map(({ content, ...rest }) => rest);
+    return [...notionPosts, ...localMetadata].sort(sortMetadataByDateDesc);
+  }
+  // 노션 미설정 시 로컬 포스트만 반환 (content 제외)
+  const localMetadata = BLOG_POSTS.map(({ content, ...rest }) => rest);
+  return localMetadata.sort(sortMetadataByDateDesc);
+}
+
+/**
+ * 노션과 로컬 포스트를 통합하여 반환 (전체 content 포함)
+ * @deprecated getAllPostsMetadata()와 getPostBySlugWithNotion()를 사용하세요
  */
 export async function getAllPostsWithNotion(): Promise<BlogPost[]> {
   // 노션 API가 설정되어 있으면 노션에서 가져오기
@@ -54,8 +84,11 @@ export function getPostBySlug(slug: string): BlogPost | null {
   return post ?? null;
 }
 
+/**
+ * 모든 slug 가져오기 (메타데이터 사용)
+ */
 export async function getAllSlugsWithNotion(): Promise<string[]> {
-  const posts = await getAllPostsWithNotion();
+  const posts = await getAllPostsMetadata();
   return posts.map((p) => p.slug);
 }
 
@@ -63,8 +96,11 @@ export function getAllSlugs(): string[] {
   return BLOG_POSTS.map((p) => p.slug);
 }
 
+/**
+ * 모든 카테고리 가져오기 (메타데이터 사용)
+ */
 export async function getAllCategoriesWithNotion(): Promise<string[]> {
-  const posts = await getAllPostsWithNotion();
+  const posts = await getAllPostsMetadata();
   const categories = posts.map((p) => p.category);
   return Array.from(new Set(categories));
 }
@@ -82,6 +118,19 @@ export function getRecentPosts(limit: number = 3): BlogPost[] {
   return getAllPosts().slice(0, limit);
 }
 
+/**
+ * 최근 포스트 메타데이터 가져오기 (content 제외)
+ */
+export async function getRecentPostsMetadata(
+  limit: number = 3
+): Promise<import("./notion").BlogPostMetadata[]> {
+  const posts = await getAllPostsMetadata();
+  return posts.slice(0, limit);
+}
+
+/**
+ * @deprecated getRecentPostsMetadata()를 사용하세요
+ */
 export async function getRecentPostsWithNotion(
   limit: number = 3
 ): Promise<BlogPost[]> {
@@ -112,10 +161,10 @@ export type BlogStats = {
 };
 
 /**
- * 블로그 활동 통계 가져오기
+ * 블로그 활동 통계 가져오기 (메타데이터 사용 - 빠른 성능)
  */
 export async function getBlogStats(): Promise<BlogStats> {
-  const posts = await getAllPostsWithNotion();
+  const posts = await getAllPostsMetadata();
   const totalPosts = posts.length;
 
   // 이번 달 포스트 수 계산

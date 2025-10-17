@@ -6,30 +6,33 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import type { BlogPost } from "@/lib/posts";
+import type { BlogPostMetadata } from "@/lib/posts";
 
 type RecentPostsCardProps = {
-  posts: BlogPost[];
+  posts: BlogPostMetadata[];
 };
 
 export function RecentPostsCard({ posts }: RecentPostsCardProps) {
   return (
     <Card
       id="blog"
-      className="md:col-span-2 lg:col-span-3 p-6 pb-8 bg-card border border-border relative overflow-hidden rounded-2xl shadow-none"
+      className="md:col-span-2 lg:col-span-3 p-6 pb-8 bg-[#7657fe] border border-border relative overflow-hidden rounded-2xl shadow-none"
     >
       <div className="flex items-center justify-between">
-        <h3 className="font-bold text-card-foreground font-sans">
-          Recent Posts
-        </h3>
+        <div className="flex items-center gap-3">
+          <div className="w-3 h-3 rounded-full bg-[#6acdff] animate-pulse"></div>
+          <h3 className="font-extrabold text-white font-sans">
+            Recent Posts
+          </h3>
+        </div>
         <Link href="/blog">
           <Button
             variant="ghost"
             size="sm"
-            className="font-sans text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="font-sans font-bold text-sm text-white hover:cursor-pointer group"
           >
             View All Posts
-            <ArrowRight className="w-4 h-4 ml-1" />
+            <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-2 transition-all duration-200" />
           </Button>
         </Link>
       </div>
@@ -53,15 +56,15 @@ export function RecentPostsCard({ posts }: RecentPostsCardProps) {
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold font-sans mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                <h4 className="font-extrabold font-sans mb-1 text-white group-hover:text-white/80 transition-colors">
                   {post.title}
                 </h4>
                 {post.introduction && (
-                  <p className="text-sm text-muted-foreground mb-2 font-sans line-clamp-2">
+                  <p className="text-sm font-bold text-white/80 mb-2 font-sans line-clamp-2">
                     {post.introduction}
                   </p>
                 )}
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-2 font-bold text-xs text-white/70">
                   <Calendar className="w-3 h-3" />
                   <span className="font-sans">
                     {new Date(post.date).toLocaleDateString("en-US", {
@@ -72,7 +75,7 @@ export function RecentPostsCard({ posts }: RecentPostsCardProps) {
                   </span>
                   <Badge
                     variant="outline"
-                    className="text-xs font-sans rounded-full ml-2"
+                    className="text-xs font-sans font-bold rounded-full ml-2 text-white border-white/30"
                   >
                     {post.category}
                   </Badge>
