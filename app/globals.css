@@ -4,93 +4,136 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Clean black & white color scheme for light mode */
-  --background: #ffffff;
-  --foreground: #000000;
-  --card: #ffffff;
-  --card-foreground: #000000;
-  --popover: #ffffff;
-  --popover-foreground: #000000;
-  /* Updated primary color to #6937a1 for hover effects */
-  --primary: #6937a1;
+  /* --- 3D/Clay Palette --- */
+  /* 배경: 차가운 디지털 화이트가 아닌, 따뜻하고 깊이 있는 오프화이트/그레이 */
+  --background: #f0f2f5; 
+  --foreground: #2d3436;
+
+  /* Card: 유리 질감과 클레이 질감의 조화 */
+  --card: rgba(255, 255, 255, 0.65);
+  --card-foreground: #2d3436;
+  
+  /* Popover: 더 강한 불투명도 */
+  --popover: rgba(255, 255, 255, 0.85);
+  --popover-foreground: #2d3436;
+
+  /* Primary: Senny Log의 시그니처 퍼플을 더 부드럽고 팝하게 조정 */
+  --primary: #8e44ad;
   --primary-foreground: #ffffff;
-  --secondary: #f5f5f5;
-  --secondary-foreground: #000000;
-  --muted: #737373;
-  --muted-foreground: #525252;
-  --accent: #e5e5e5;
-  --accent-foreground: #000000;
-  --destructive: #dc2626;
+  --primary-shadow: rgba(142, 68, 173, 0.3);
+
+  /* Secondary: 부드러운 깊이감을 주는 서브 컬러 */
+  --secondary: #dfe6e9;
+  --secondary-foreground: #2d3436;
+
+  /* Muted */
+  --muted: #b2bec3;
+  --muted-foreground: #636e72;
+
+  /* Accent: 하이라이트 요소 */
+  --accent: #a29bfe;
+  --accent-foreground: #ffffff;
+
+  /* Destructive */
+  --destructive: #ff7675;
   --destructive-foreground: #ffffff;
-  --border: #e5e5e5;
-  --input: #ffffff;
-  --ring: rgba(0, 0, 0, 0.2);
-  --chart-1: #000000;
-  --chart-2: #525252;
-  --chart-3: #737373;
-  --chart-4: #a3a3a3;
-  --chart-5: #d4d4d4;
-  --radius: 0.5rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #000000;
-  /* Updated sidebar primary to #6937a1 */
-  --sidebar-primary: #6937a1;
+
+  /* UI Borders: 3D에서는 선보다 면과 그림자로 구분하므로 아주 연하게 */
+  --border: rgba(0, 0, 0, 0.05);
+  --input: rgba(255, 255, 255, 0.5);
+  --ring: rgba(142, 68, 173, 0.4);
+
+  /* Charts */
+  --chart-1: #6c5ce7;
+  --chart-2: #a29bfe;
+  --chart-3: #74b9ff;
+  --chart-4: #81ecec;
+  --chart-5: #00cec9;
+
+  /* Radius: Claymorphism은 둥글둥글함이 생명 */
+  --radius: 1.5rem;
+
+  /* Sidebar */
+  --sidebar: rgba(255, 255, 255, 0.7);
+  --sidebar-foreground: #2d3436;
+  --sidebar-primary: #8e44ad;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f5f5f5;
-  --sidebar-accent-foreground: #000000;
-  --sidebar-border: #e5e5e5;
-  --sidebar-ring: rgba(0, 0, 0, 0.2);
-  /* Inline code background color */
-  --inline-code-bg: #f0f1f2;
+  --sidebar-accent: #dfe6e9;
+  --sidebar-accent-foreground: #2d3436;
+  --sidebar-border: rgba(0,0,0,0.05);
+  --sidebar-ring: rgba(142, 68, 173, 0.4);
+
+  --inline-code-bg: #dfe6e9;
+  
+  /* --- 3D Shadows --- */
+  /* 빛이 왼쪽 위에서 오는 것을 가정 */
+  --shadow-clay-sm: 5px 5px 10px rgba(163, 177, 198, 0.4), -5px -5px 10px rgba(255, 255, 255, 0.8);
+  --shadow-clay-md: 9px 9px 16px rgba(163, 177, 198, 0.4), -9px -9px 16px rgba(255, 255, 255, 0.8);
+  --shadow-clay-lg: 14px 14px 24px rgba(163, 177, 198, 0.4), -14px -14px 24px rgba(255, 255, 255, 0.8);
+  --shadow-pressed: inset 6px 6px 10px rgba(163, 177, 198, 0.4), inset -6px -6px 10px rgba(255, 255, 255, 0.8);
+  --shadow-float: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .dark {
-  /* Clean black & white color scheme for dark mode */
-  --background: #000000;
-  --foreground: #ffffff;
-  --card: #0a0a0a;
-  --card-foreground: #ffffff;
-  --popover: #0a0a0a;
-  --popover-foreground: #ffffff;
-  /* Updated primary color to #6937a1 for hover effects in dark mode */
-  --primary: #6937a1;
-  --primary-foreground: #ffffff;
-  --secondary: #1a1a1a;
-  --secondary-foreground: #ffffff;
-  --muted: #737373;
-  --muted-foreground: #a3a3a3;
-  --accent: #262626;
+  /* Dark Mode Clay: 깊은 우주 같은 느낌 */
+  --background: #2d3436;
+  --foreground: #dfe6e9;
+
+  --card: rgba(45, 52, 54, 0.65);
+  --card-foreground: #dfe6e9;
+  
+  --popover: rgba(45, 52, 54, 0.85);
+  --popover-foreground: #dfe6e9;
+
+  --primary: #a29bfe;
+  --primary-foreground: #2d3436;
+  --primary-shadow: rgba(162, 155, 254, 0.3);
+
+  --secondary: #636e72;
+  --secondary-foreground: #dfe6e9;
+
+  --muted: #636e72;
+  --muted-foreground: #b2bec3;
+
+  --accent: #6c5ce7;
   --accent-foreground: #ffffff;
-  --destructive: #dc2626;
+
+  --destructive: #d63031;
   --destructive-foreground: #ffffff;
-  --border: #262626;
-  --input: #0a0a0a;
-  --ring: rgba(255, 255, 255, 0.2);
-  --chart-1: #ffffff;
-  --chart-2: #a3a3a3;
-  --chart-3: #737373;
-  --chart-4: #525252;
-  --chart-5: #262626;
-  --radius: 0.5rem;
-  --sidebar: #000000;
-  --sidebar-foreground: #ffffff;
-  /* Updated sidebar primary to #6937a1 in dark mode */
-  --sidebar-primary: #6937a1;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #1a1a1a;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #262626;
-  --sidebar-ring: rgba(255, 255, 255, 0.2);
-  /* Inline code background color for dark mode */
-  --inline-code-bg: #282C34;
+
+  --border: rgba(255, 255, 255, 0.05);
+  --input: rgba(0, 0, 0, 0.3);
+  --ring: rgba(162, 155, 254, 0.4);
+
+  --chart-1: #a29bfe;
+  --chart-2: #6c5ce7;
+  --chart-3: #74b9ff;
+  --chart-4: #81ecec;
+  --chart-5: #00cec9;
+
+  --sidebar: rgba(45, 52, 54, 0.7);
+  --sidebar-foreground: #dfe6e9;
+  --sidebar-primary: #a29bfe;
+  --sidebar-primary-foreground: #2d3436;
+  --sidebar-accent: #636e72;
+  --sidebar-accent-foreground: #dfe6e9;
+  --sidebar-border: rgba(255, 255, 255, 0.05);
+  --sidebar-ring: rgba(162, 155, 254, 0.4);
+  
+  --inline-code-bg: #1e272e;
+
+  /* Dark Shadows: 빛을 덜 반사하고 그림자가 더 깊음 */
+  --shadow-clay-sm: 5px 5px 10px rgba(0, 0, 0, 0.5), -5px -5px 10px rgba(255, 255, 255, 0.05);
+  --shadow-clay-md: 8px 8px 16px rgba(0, 0, 0, 0.5), -8px -8px 16px rgba(255, 255, 255, 0.05);
+  --shadow-clay-lg: 12px 12px 20px rgba(0, 0, 0, 0.5), -12px -12px 20px rgba(255, 255, 255, 0.05);
+  --shadow-pressed: inset 5px 5px 10px rgba(0, 0, 0, 0.5), inset -5px -5px 10px rgba(255, 255, 255, 0.05);
+  --shadow-float: 0 15px 35px rgba(0, 0, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 @theme inline {
-  /* Updated font configuration to use only Geist */
   --font-sans: var(--font-geist);
   --font-serif: var(--font-geist);
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, monospace;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -116,10 +159,12 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 4px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 8px);
+  
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -128,13 +173,50 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Custom Shadows for Tailwind v4 */
+  --shadow-clay-sm: var(--shadow-clay-sm);
+  --shadow-clay-md: var(--shadow-clay-md);
+  --shadow-clay-lg: var(--shadow-clay-lg);
+  --shadow-pressed: var(--shadow-pressed);
+  --shadow-float: var(--shadow-float);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
   }
   body {
     @apply bg-background text-foreground;
+    /* 은은한 Mesh Gradient 배경 효과 */
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  
+  /* Light mode mesh gradient override */
+  :root:not(.dark) body {
+    background-image: 
+      radial-gradient(at 10% 10%, rgba(255, 230, 230, 0.4) 0px, transparent 50%),
+      radial-gradient(at 90% 20%, rgba(220, 230, 255, 0.4) 0px, transparent 50%),
+      radial-gradient(at 50% 80%, rgba(240, 255, 220, 0.4) 0px, transparent 50%);
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/60 dark:bg-black/60 backdrop-blur-xl border border-white/20 dark:border-white/10;
+  }
+  
+  .clay-card {
+    @apply bg-card rounded-[2rem] shadow-clay-md border border-white/40 dark:border-white/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-float;
+  }
+
+  .text-3d {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
   }
 }

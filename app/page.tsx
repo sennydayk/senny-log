@@ -4,249 +4,162 @@ import { Button } from "@/components/ui/button";
 import {
   Github,
   Linkedin,
-  Twitter,
   Mail,
   MapPin,
-  ArrowRight,
-  Calendar,
   FileText,
 } from "lucide-react";
-import { ThemeToggle } from "@/components/theme-toggle";
-import Link from "next/link";
 import Image from "next/image";
 import { getRecentPostsMetadata, getBlogStats } from "@/lib/posts";
 import { RecentPostsCard } from "@/components/recent-posts-card";
 import { BlogActivityDashboard } from "@/components/blog-activity-dashboard";
+import Link from "next/link";
 
 export default async function Portfolio() {
   const recentPosts = await getRecentPostsMetadata(3);
   const blogStats = await getBlogStats();
 
   const techStack = [
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Next.js",
-    "Node.js",
-    "TailwindCSS",
-    "Docker",
-    "AWS",
+    "JavaScript", "TypeScript", "React", "Next.js",
+    "Node.js", "TailwindCSS", "Docker", "AWS",
   ];
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-end mb-6">
-          <ThemeToggle />
+    <div className="flex flex-col gap-8 py-8 animate-in fade-in zoom-in duration-500">
+      
+      {/* Hero / Intro Section */}
+      <div className="text-center py-10 space-y-4">
+        <h1 className="text-4xl md:text-6xl font-black tracking-tight text-foreground drop-shadow-sm">
+          Senny's <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Log</span>
+        </h1>
+        <p className="text-xl text-muted-foreground font-medium max-w-2xl mx-auto">
+          3D 인터랙션과 디자인 시스템을 탐구하는 프론트엔드 개발자의 기록소
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[minmax(180px,auto)]">
+        
+        {/* About Me - Tall Card (Left) */}
+        <Card className="md:col-span-2 lg:col-span-2 row-span-2 p-8 bg-gradient-to-br from-white/80 to-white/40 dark:from-white/10 dark:to-white/5 backdrop-blur-3xl border-white/20 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-lime-200/50 to-emerald-200/50 dark:from-lime-900/30 dark:to-emerald-900/30 opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+          
+          <div className="relative z-10 flex flex-col h-full gap-6">
+            <div className="flex items-center gap-6">
+              <div className="w-24 h-24 rounded-full overflow-hidden shadow-clay-md border-4 border-white/50 dark:border-white/10 flex-shrink-0">
+                <Image
+                  src="/myprofile.JPG"
+                  alt="Profile"
+                  width={96}
+                  height={96}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <div>
+                <h2 className="text-3xl font-black text-foreground">Kim Seyeon</h2>
+                <div className="flex items-center gap-2 text-muted-foreground font-bold mt-2">
+                  <MapPin className="w-4 h-4" />
+                  <span>Seoul, KR</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-1 space-y-4">
+               <div className="p-4 rounded-2xl bg-white/40 dark:bg-black/20 backdrop-blur-md shadow-inner">
+                 <BlogActivityDashboard stats={blogStats} />
+               </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mt-auto">
+              <Link href="https://your-resume-url.com" target="_blank" className="mr-2">
+                 <Button variant="clay" size="sm" className="rounded-full">
+                    <FileText className="w-4 h-4 mr-2" /> Resume
+                 </Button>
+              </Link>
+              {techStack.map((tech) => (
+                <Badge
+                  key={tech}
+                  variant="secondary"
+                  className="rounded-full bg-white/50 dark:bg-white/10 backdrop-blur-sm border-0 px-3 py-1 text-xs font-bold shadow-sm hover:scale-110 transition-transform cursor-default"
+                >
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        {/* Status Card */}
+        <Card className="md:col-span-1 p-6 bg-gradient-to-br from-sky-100 to-blue-100 dark:from-sky-900/40 dark:to-blue-900/40 relative overflow-hidden group">
+           <div className="absolute top-0 right-0 w-24 h-24 bg-sky-400/20 rounded-full blur-2xl -mr-10 -mt-10" />
+           <div className="relative z-10 h-full flex flex-col justify-between">
+             <div className="flex items-center gap-3">
+               <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                </span>
+               <h3 className="font-extrabold text-foreground">Available</h3>
+             </div>
+             <div>
+                <p className="text-sm font-bold text-muted-foreground mb-1">Current Role</p>
+                <p className="font-black text-lg">Frontend Dev 👩🏻‍💻</p>
+             </div>
+           </div>
+        </Card>
+
+        {/* Social Links */}
+        <Card className="md:col-span-1 p-6 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/40 dark:to-purple-900/40 relative overflow-hidden group">
+           <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-400/20 rounded-full blur-2xl -ml-10 -mb-10" />
+           <div className="relative z-10 h-full flex flex-col">
+             <h3 className="font-extrabold text-foreground mb-4">Connect</h3>
+             <div className="space-y-3 mt-auto">
+               <a href="#" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors p-2 hover:bg-white/30 rounded-lg">
+                 <Github className="w-5 h-5" />
+                 <span className="font-bold text-sm">GitHub</span>
+               </a>
+               <a href="#" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors p-2 hover:bg-white/30 rounded-lg">
+                 <Linkedin className="w-5 h-5" />
+                 <span className="font-bold text-sm">LinkedIn</span>
+               </a>
+               <a href="#" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors p-2 hover:bg-white/30 rounded-lg">
+                 <Mail className="w-5 h-5" />
+                 <span className="font-bold text-sm">Email</span>
+               </a>
+             </div>
+           </div>
+        </Card>
+
+        {/* Recent Posts - Wide Card */}
+        <div className="md:col-span-2 lg:col-span-2 row-span-2 h-full">
+           <RecentPostsCard posts={recentPosts} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 h-[750px] md:h-[650px] md:grid-rows-[2fr_0.8fr]">
-          {/* About Me - Tall Card (Top Left) */}
-          <Card
-            id="about"
-            className="md:col-span-2 lg:col-span-2 md:row-span-2 p-6 bg-[#a7ec0a] border border-border relative overflow-hidden rounded-2xl shadow-none"
-          >
-            <div className="flex flex-col h-full relative z-10">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
-                  <Image
-                    src="/myprofile.JPG"
-                    alt="Profile"
-                    width={80}
-                    height={80}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div>
-                  <h2 className="text-xl font-extrabold text-black font-sans">
-                    Kim Seyeon
-                  </h2>
-                  <div className="flex items-center gap-2 text-sm font-bold text-[#525252] mt-1">
-                    <MapPin className="w-4 h-4" />
-                    <span className="font-sans">대한민국, 서울</span>
-                  </div>
-                </div>
-              </div>
+        {/* Experience Card */}
+        <Card className="md:col-span-2 lg:col-span-2 p-8 bg-gradient-to-br from-rose-100 to-pink-100 dark:from-rose-900/40 dark:to-pink-900/40 relative overflow-hidden">
+           <div className="absolute right-0 bottom-0 w-48 h-48 bg-pink-400/20 rounded-full blur-3xl" />
+           <div className="relative z-10">
+             <h3 className="font-extrabold text-2xl text-foreground mb-6">Experience</h3>
+             <div className="space-y-6">
+               <div className="flex gap-4 group">
+                 <div className="w-12 h-12 rounded-2xl bg-white/60 dark:bg-white/10 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                   <span className="font-black text-rose-500">RE</span>
+                 </div>
+                 <div>
+                   <h4 className="font-bold text-lg text-foreground">Frontend Developer</h4>
+                   <p className="text-sm font-medium text-muted-foreground">RushEight Inc. • 2025 - Present</p>
+                 </div>
+               </div>
+               <div className="flex gap-4 group">
+                 <div className="w-12 h-12 rounded-2xl bg-white/60 dark:bg-white/10 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                   <span className="font-black text-rose-500">ST</span>
+                 </div>
+                 <div>
+                   <h4 className="font-bold text-lg text-foreground">Full Stack Developer</h4>
+                   <p className="text-sm font-medium text-muted-foreground">StartupXYZ • 2020 - 2022</p>
+                 </div>
+               </div>
+             </div>
+           </div>
+        </Card>
 
-              {/* Blog Activity Dashboard */}
-              <div className="pb-4 mb-4 border-b border-t border-[#262626]">
-                <BlogActivityDashboard stats={blogStats} />
-              </div>
-
-              {/* <p className="text-card-foreground leading-relaxed font-sans text-sm mb-4">
-                사용자 경험을 중심으로 인터랙티브한 웹을 만드는 프론트엔드
-                개발자입니다.
-              </p> */}
-              <div className="mt-auto mb-3">
-                <a
-                  href="https://your-resume-url.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 mb-3 text-black hover:text-primary w-fit hover:translate-x-1 transition-all duration-200"
-                >
-                  <FileText className="w-4 h-4" />
-                  <span className="text-sm font-sans font-medium">Resume</span>
-                </a>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {techStack.map((tech) => (
-                  <Badge
-                    key={tech}
-                    variant="secondary"
-                    className="font-sans text-xs rounded-full bg-[#1a1a1a] text-white border-transparent"
-                  >
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          </Card>
-
-          {/* Recent Posts Card */}
-          <RecentPostsCard posts={recentPosts} />
-
-          {/* Status - Square Card (Top Right) */}
-          <Card className="md:col-span-1 p-6 bg-[#6acdff] border border-border relative overflow-hidden rounded-2xl shadow-none">
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-3 h-3 rounded-full bg-primary animate-pulse"></div>
-                <h3 className="font-extrabold text-black font-sans">
-                  Available
-                </h3>
-              </div>
-              <p className="text-sm font-bold text-[#525252] mb-4 font-sans">
-                Open to new opportunities
-              </p>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm font-bold text-[#525252] font-sans mb-1">
-                    Role
-                  </p>
-                  <p className="font-bold text-black font-sans">
-                    Frontend Developer 👩🏻‍💻
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-[#525252] font-sans mb-1">
-                    Projects
-                  </p>
-                  <p className="font-bold text-black font-sans">
-                    8+
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-[#525252] font-sans mb-1">
-                    Projects
-                  </p>
-                  <p className="font-bold text-black font-sans">
-                    8+
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-[#525252] font-sans mb-1">
-                    Experience
-                  </p>
-                  <p className="font-bold text-black font-sans">
-                    1 years
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Social Links - Square Card (Bottom Left) */}
-          <Card
-            id="contact"
-            className="md:col-span-1 p-6 bg-[#9bd9f8] border border-border relative overflow-hidden rounded-2xl shadow-none"
-          >
-            <div className="relative z-10">
-              <h3 className="font-extrabold text-black mb-4 font-sans">
-                Connect
-              </h3>
-              <div className="space-y-3">
-                <a
-                  href="#"
-                  className="flex items-center gap-3 text-black hover:text-primary hover:font-extrabold hover:translate-x-1 transition-all duration-200"
-                >
-                  <Github className="w-4 h-4" />
-                  <span className="text-sm font-semibold font-sans">GitHub</span>
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-3 text-black hover:text-primary hover:translate-x-1 transition-all duration-200"
-                >
-                  <Linkedin className="w-4 h-4" />
-                  <span className="text-sm font-semibold font-sans">LinkedIn</span>
-                </a>
-                {/* <a
-                  href="#"
-                  className="flex items-center gap-3 text-black hover:text-primary hover:translate-x-1 transition-all duration-200"
-                >
-                  <Twitter className="w-4 h-4" />
-                  <span className="text-sm font-sans">Twitter</span>
-                </a> */}
-                <a
-                  href="#"
-                  className="flex items-center gap-3 text-black hover:text-primary hover:translate-x-1 transition-all duration-200"
-                >
-                  <Mail className="w-4 h-4" />
-                  <span className="text-sm font-semibold font-sans">Email</span>
-                </a>
-              </div>
-            </div>
-          </Card>
-
-          {/* Experience moved to bottom row */}
-          <Card
-            id="experience"
-            className="md:col-span-2 lg:col-span-3 p-6 bg-[#ff3299] border border-border relative overflow-hidden rounded-2xl shadow-none"
-          >
-            <div className="relative z-10">
-              <h3 className="font-extrabold text-white mb-4 font-sans">
-                Experience
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-white font-sans">
-                      RE
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-white font-sans text-sm">
-                      Frontend Developer
-                    </h4>
-                    <p className="text-xs font-bold text-white/80 font-sans">
-                      RushEight Inc. • 2025 - Present
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-white font-sans">
-                      ST
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-white font-sans text-sm">
-                      Full Stack Developer
-                    </h4>
-                    <p className="text-xs font-bold text-white/80 font-sans">
-                      StartupXYZ • 2020 - 2022
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Footer */}
-        <footer className="mt-12 text-center">
-          <p className="text-muted-foreground text-sm font-sans">
-            Built with v0.dev • © 2025 Felix Macaspac
-          </p>
-        </footer>
       </div>
     </div>
   );
