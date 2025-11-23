@@ -1,19 +1,25 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist } from "next/font/google"
+import { Oswald, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 
-const geist = Geist({
+const oswald = Oswald({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-geist",
+  variable: "--font-oswald",
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains",
 })
 
 export const metadata: Metadata = {
-  title: "Portfolio - Your Name",
-  description: "A modern bento-style portfolio showcasing my work and experience",
-  generator: "v0.app",
+  title: "SENNY // MAXIMALISM",
+  description: "A digital manifesto of bold ideas and louder designs.",
+  generator: "Cursor",
 }
 
 export default function RootLayout({
@@ -22,9 +28,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} antialiased`} suppressHydrationWarning>
-      <body suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+    <html lang="en" className={`${oswald.variable} ${jetbrainsMono.variable} antialiased`} suppressHydrationWarning>
+      <body suppressHydrationWarning className="min-h-screen overflow-x-hidden bg-background text-foreground">
+        <div className="noise-overlay" />
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
       </body>

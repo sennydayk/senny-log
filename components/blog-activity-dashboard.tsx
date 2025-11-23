@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import type { BlogStats } from "@/lib/posts";
-import { BarChart3, TrendingUp } from "lucide-react";
+import { BarChart3, TrendingUp, Activity } from "lucide-react";
 
 type BlogActivityDashboardProps = {
   stats: BlogStats;
@@ -18,7 +18,6 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
   const heatmapScrollRef = useRef<HTMLDivElement>(null);
 
-  // 연도별 필터링 (실제 포스트가 있는 연도만)
   const availableYears = Array.from(
     new Set(
       stats.heatmap
@@ -30,12 +29,10 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
     availableYears[0] || 2025
   );
 
-  // 클라이언트 마운트 체크
   useEffect(() => {
     setIsMounted(true);
     setIsLoaded(true);
 
-    // 카운트업 애니메이션
     const duration = 1000;
     const steps = 50;
     const stepDuration = duration / steps;
@@ -61,10 +58,8 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
     return () => clearInterval(timer);
   }, [stats]);
 
-  // 히트맵을 가장 최근 날짜(오른쪽 끝)로 스크롤
   useEffect(() => {
     if (heatmapScrollRef.current && activeTab === "heatmap") {
-      // 약간의 딜레이를 주어 렌더링이 완료된 후 스크롤
       setTimeout(() => {
         if (heatmapScrollRef.current) {
           heatmapScrollRef.current.scrollLeft =
@@ -75,199 +70,112 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
   }, [activeTab, selectedYear]);
 
   const getHeatmapColor = (count: number) => {
-    if (count === 0) return "#d1d5db"; // 회색
-    if (count === 1) return "#c084fc"; // 연한 보라색
-    if (count === 2) return "#9333ea"; // 중간 보라색
-    return "#7e22ce"; // 진한 보라색
+    if (count === 0) return "rgba(128, 128, 128, 0.1)"; 
+    if (count === 1) return "rgba(204, 255, 0, 0.3)"; 
+    if (count === 2) return "rgba(204, 255, 0, 0.6)"; 
+    return "rgba(204, 255, 0, 1)"; // Acid Lime
   };
 
   const getCategoryColor = (index: number) => {
     const colors = [
-      "hsl(var(--primary))",
-      "hsl(var(--primary) / 0.7)",
-      "hsl(var(--primary) / 0.5)",
-      "hsl(var(--primary) / 0.3)",
+      "#ccff00", // Lime
+      "#ff0099", // Pink
+      "#00ffff", // Cyan
+      "#ffffff", // White
     ];
     return colors[index % colors.length];
   };
 
-  // 클라이언트 마운트 전에는 기본 레이아웃만 표시
   if (!isMounted) {
     return (
-      <div className="w-full">
-        <div className="mt-3 mb-4">
-          <h3 className="text-md font-bold text-black mb-1 font-sans">
-            Blog Activity
-          </h3>
-          <p className="text-xs text-[#525252] font-sans">
-            최근 작성 활동과 카테고리 현황
-          </p>
-        </div>
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-muted/20 rounded" />
-          <div className="h-32 bg-muted/20 rounded" />
-        </div>
+      <div className="w-full font-mono text-xs">
+        <div className="animate-pulse text-primary">LOADING_SYSTEM_METRICS...</div>
       </div>
     );
   }
 
   return (
-    <div className="w-full">
-      {/* 헤더 */}
-      <div className="mt-3 mb-4">
-        <h3 className="text-md font-bold text-black mb-1 font-sans">
-          Blog Activity
-        </h3>
-        {/* <p className="text-xs text-[#525252] font-sans">
-          최근 작성 활동과 카테고리 현황
-        </p> */}
+    <div className="w-full font-mono">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4 border-b border-dashed border-muted pb-2">
+         <div className="flex items-center gap-2 text-xs font-bold">
+            <Activity className="w-4 h-4 text-primary animate-pulse" />
+            <span>SYSTEM_ACTIVITY</span>
+         </div>
+         <div className="flex gap-1">
+            <button
+               onClick={() => setActiveTab("heatmap")}
+               className={`px-2 py-0.5 text-[10px] border ${activeTab === "heatmap" ? "bg-primary text-black border-primary" : "border-muted text-muted-foreground hover:text-foreground"}`}
+            >
+               HEATMAP
+            </button>
+            <button
+               onClick={() => setActiveTab("categories")}
+               className={`px-2 py-0.5 text-[10px] border ${activeTab === "categories" ? "bg-primary text-black border-primary" : "border-muted text-muted-foreground hover:text-foreground"}`}
+            >
+               CATEGORY
+            </button>
+         </div>
       </div>
 
-      {/* 탭 */}
-      <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setActiveTab("heatmap")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs transition-all font-sans text-[#525252] ${
-            activeTab === "heatmap"
-              ? "font-extrabold"
-              : "font-medium cursor-pointer"
-          }`}
-        >
-          <TrendingUp className="w-3 h-3" />
-          활동 히트맵
-        </button>
-        <button
-          onClick={() => setActiveTab("categories")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs transition-all font-sans text-[#525252] ${
-            activeTab === "categories"
-              ? "font-extrabold"
-              : "font-medium cursor-pointer"
-          }`}
-        >
-          <BarChart3 className="w-3 h-3" />
-          카테고리
-        </button>
-      </div>
-
-      {/* 컨텐츠 영역 */}
+      {/* Content */}
       <div className="overflow-hidden">
         {activeTab === "heatmap" ? (
           <div className="space-y-4">
-            {/* 통계 */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-primary/5 rounded-lg p-3">
-                <div className="text-xs text-[#525252] mb-1 font-sans">
-                  Total Posts
-                </div>
-                <div className="text-2xl font-bold text-primary font-sans">
-                  {countUp.total}
-                </div>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="border border-muted p-2 bg-black/20">
+                <div className="text-[10px] text-muted-foreground mb-1">TOTAL_LOGS</div>
+                <div className="text-xl font-bold text-white">{String(countUp.total).padStart(3, '0')}</div>
               </div>
-              <div className="bg-primary/5 rounded-lg p-3">
-                <div className="text-xs text-[#525252] mb-1 font-sans">
-                  This Month
-                </div>
-                <div className="text-2xl font-bold text-primary font-sans flex items-center gap-1">
-                  {countUp.monthly}
-                </div>
+              <div className="border border-muted p-2 bg-black/20">
+                <div className="text-[10px] text-muted-foreground mb-1">CURRENT_MONTH</div>
+                <div className="text-xl font-bold text-primary">{String(countUp.monthly).padStart(2, '0')}</div>
               </div>
             </div>
 
-            {/* 연도 선택 */}
-            {availableYears.length > 1 && (
-              <div className="flex gap-2 mb-3">
-                {availableYears.map((year) => (
-                  <button
-                    key={year}
-                    onClick={() => setSelectedYear(year)}
-                    className={`px-2.5 py-1 rounded text-xs transition-all font-sans ${
-                      selectedYear === year
-                        ? "font-bold text-primary"
-                        : "font-medium text-[#525252] cursor-pointer"
-                    }`}
-                  >
-                    {year}
-                  </button>
-                ))}
-              </div>
-            )}
+            {/* Heatmap */}
+            <div className="relative bg-black/40 p-2 border border-muted">
+               {/* Year Selector */}
+               {availableYears.length > 1 && (
+                 <div className="absolute top-2 right-2 flex gap-1 z-10">
+                   {availableYears.map((year) => (
+                     <button
+                       key={year}
+                       onClick={() => setSelectedYear(year)}
+                       className={`text-[10px] px-1 ${selectedYear === year ? "text-primary underline" : "text-muted-foreground"}`}
+                     >
+                       {year}
+                     </button>
+                   ))}
+                 </div>
+               )}
 
-            {/* 히트맵 */}
-            <div className="relative">
-              <div className="flex items-start gap-2">
-                {/* 연도 레이블 */}
-                <div className="text-xs font-medium text-[#525252] pt-1 font-sans w-10 flex-shrink-0">
-                  {selectedYear}
-                </div>
-
-                {/* 히트맵 그리드 */}
-                <div ref={heatmapScrollRef} className="flex-1 overflow-x-auto">
-                  <div className="flex gap-0.5">
+              <div className="flex items-start gap-2 overflow-x-auto pb-1" ref={heatmapScrollRef}>
+                <div className="flex gap-0.5 min-w-full">
                     {(() => {
-                      // 선택된 연도의 데이터만 필터링
-                      const yearData = stats.heatmap.filter(
-                        (d) => d.year === selectedYear
-                      );
-
-                      // 주차별로 그룹화
+                      const yearData = stats.heatmap.filter(d => d.year === selectedYear);
                       const weekGroups = new Map<number, typeof yearData>();
                       yearData.forEach((data) => {
-                        if (!weekGroups.has(data.week)) {
-                          weekGroups.set(data.week, []);
-                        }
+                        if (!weekGroups.has(data.week)) weekGroups.set(data.week, []);
                         weekGroups.get(data.week)?.push(data);
                       });
-
-                      // 주차 순서대로 정렬
-                      const sortedWeeks = Array.from(weekGroups.keys()).sort(
-                        (a, b) => a - b
-                      );
+                      const sortedWeeks = Array.from(weekGroups.keys()).sort((a, b) => a - b);
 
                       return sortedWeeks.map((weekIndex) => {
                         const weekData = weekGroups.get(weekIndex) || [];
-
                         return (
-                          <div
-                            key={weekIndex}
-                            className="flex flex-col gap-0.5"
-                          >
+                          <div key={weekIndex} className="flex flex-col gap-0.5">
                             {Array.from({ length: 7 }).map((_, dayIndex) => {
-                              const cellData = weekData.find(
-                                (d) => d.day === dayIndex
-                              );
-                              const isHovered =
-                                hoveredCell === `${weekIndex}-${dayIndex}`;
-
+                              const cellData = weekData.find(d => d.day === dayIndex);
                               return (
                                 <div
                                   key={`${weekIndex}-${dayIndex}`}
-                                  className={`w-2.5 h-2.5 !rounded-sm transition-all duration-200 cursor-pointer border border-transparent ${
-                                    isLoaded
-                                      ? "opacity-100 scale-100"
-                                      : "opacity-0 scale-0"
-                                  } ${
-                                    isHovered
-                                      ? "ring-2 ring-primary/50 scale-125 z-10"
-                                      : ""
-                                  }`}
+                                  className="w-2 h-2 transition-colors duration-300"
                                   style={{
-                                    backgroundColor: getHeatmapColor(
-                                      cellData?.count || 0
-                                    ),
-                                    borderRadius: "0.5rem",
-                                    transitionDelay: `${
-                                      (weekIndex * 7 + dayIndex) * 2
-                                    }ms`,
+                                    backgroundColor: getHeatmapColor(cellData?.count || 0),
                                   }}
-                                  onMouseEnter={() =>
-                                    setHoveredCell(`${weekIndex}-${dayIndex}`)
-                                  }
-                                  onMouseLeave={() => setHoveredCell(null)}
-                                  title={
-                                    cellData
-                                      ? `${cellData.date}: ${cellData.count} posts`
-                                      : "No data"
-                                  }
+                                  title={cellData ? `${cellData.date}: ${cellData.count}` : ""}
                                 />
                               );
                             })}
@@ -275,75 +183,27 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
                         );
                       });
                     })()}
-                  </div>
                 </div>
-              </div>
-
-              {/* 범례 */}
-              <div className="flex items-center justify-end gap-2 mt-3 text-xs text-[#525252] font-sans">
-                <span>Less</span>
-                <div className="flex gap-0.5">
-                  {[0, 1, 2, 3].map((level) => (
-                    <div
-                      key={level}
-                      className="w-2.5 h-2.5 !rounded-sm"
-                      style={{
-                        backgroundColor: getHeatmapColor(level),
-                        borderRadius: "0.5rem",
-                      }}
-                    />
-                  ))}
-                </div>
-                <span>More</span>
               </div>
             </div>
           </div>
         ) : (
-          <div className="space-y-3">
-            {stats.categories.length === 0 ? (
-              <p className="text-xs text-[#525252] text-center py-4 font-sans">
-                아직 작성된 글이 없습니다.
-              </p>
-            ) : (
-              stats.categories.map((category, index) => (
-                <div
-                  key={category.name}
-                  className={`flex items-center justify-between p-2.5 rounded-lg  transition-all duration-300 cursor-pointer transform hover:scale-105 ${
-                    isLoaded
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 -translate-x-4"
-                  }`}
-                  style={{
-                    transitionDelay: `${index * 100}ms`,
-                  }}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <div
-                      className="w-3 h-3 rounded-full shadow-sm"
-                      style={{ backgroundColor: getCategoryColor(index) }}
-                    />
-                    <span className="font-medium text-black text-sm font-sans">
-                      {category.name}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full transition-all duration-1000 ease-out"
-                        style={{
-                          width: isLoaded ? `${category.percentage}%` : "0%",
-                          backgroundColor: getCategoryColor(index),
-                          transitionDelay: `${index * 100}ms`,
-                        }}
+          <div className="space-y-2">
+             {stats.categories.map((category, index) => (
+                <div key={category.name} className="flex items-center gap-2 text-xs">
+                   <div className="w-16 text-right shrink-0 truncate">{category.name}</div>
+                   <div className="flex-1 h-2 bg-muted/20 relative overflow-hidden">
+                      <div 
+                         className="h-full absolute top-0 left-0"
+                         style={{ 
+                            width: `${category.percentage}%`, 
+                            backgroundColor: getCategoryColor(index) 
+                         }}
                       />
-                    </div>
-                    <span className="text-xs font-bold text-[#525252] w-6 text-right font-sans">
-                      {category.count}
-                    </span>
-                  </div>
+                   </div>
+                   <div className="w-6 text-right font-bold text-primary">{category.count}</div>
                 </div>
-              ))
-            )}
+             ))}
           </div>
         )}
       </div>
