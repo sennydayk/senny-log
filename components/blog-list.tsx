@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { FolderOpen, ArrowLeft, ChevronRight, Calendar, ArrowRight, Battery, Wifi, Search } from "lucide-react";
+import { FolderOpen, ArrowLeft, ChevronRight, Calendar, ArrowRight, Battery, Wifi, Search, Star, Heart, FolderHeart } from "lucide-react";
 import type { BlogPostMetadata } from "@/lib/posts";
 
 type BlogListProps = {
@@ -30,65 +30,63 @@ export function BlogList({ posts, categories }: BlogListProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row overflow-hidden relative">
+    <div className="min-h-screen bg-[#FDF0F6] text-foreground flex flex-col md:flex-row overflow-hidden relative">
       
-      {/* Sidebar / Control Panel */}
-      <aside className="w-full md:w-80 border-b-4 md:border-b-0 md:border-r-4 border-black bg-muted flex flex-col h-auto md:h-screen sticky top-0 z-40 shrink-0 shadow-[4px_0px_0px_0px_rgba(0,0,0,0.1)]">
+      {/* Sidebar - Compact & Cute */}
+      <aside className="w-full md:w-64 border-b-2 md:border-b-0 md:border-r-2 border-border/50 bg-white/60 backdrop-blur-sm flex flex-col h-auto md:h-screen sticky top-0 z-40 shrink-0">
         {/* Header */}
-        <div className="p-6 border-b-4 border-black bg-primary text-primary-foreground relative z-20">
-            <Link href="/" className="inline-block mb-4 -ml-2 hover:bg-black/20 rounded px-2 py-1 transition-colors">
-                <div className="flex items-center gap-2 text-sm font-bold">
-                    <ArrowLeft className="w-4 h-4" /> BACK_TO_ROOT
-                </div>
+        <div className="p-5 border-b-2 border-border/30">
+            <Link href="/" className="inline-flex items-center gap-1 text-xs font-bold text-muted-foreground hover:text-primary mb-4 transition-colors">
+                <ArrowLeft className="w-3 h-3" /> Back to Home
             </Link>
-            <div className="flex items-center gap-3 mb-2">
-                 <div className="w-12 h-12 border-2 border-black rounded-full overflow-hidden bg-white relative shadow-sm">
+            
+            <div className="flex items-center gap-3">
+                 <div className="w-10 h-10 border border-border rounded-full overflow-hidden bg-white relative shadow-sm">
                     <Image
                         src="/profile.png"
                         alt="Profile"
                         fill
-                        className="object-cover grayscale"
+                        className="object-cover"
                     />
                  </div>
                  <div>
-                     <h1 className="font-black text-xl tracking-tighter uppercase transform -skew-x-6">SENNY_LOG</h1>
-                     <div className="flex items-center gap-1 text-xs font-mono opacity-80">
-                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                        SYSTEM_ACTIVE
-                     </div>
+                     <h1 className="font-black text-lg tracking-tight text-foreground">Senny.log</h1>
+                     <span className="text-[10px] font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">
+                        Lovely Mode 💜
+                     </span>
                  </div>
             </div>
         </div>
 
-        {/* Navigation / Folder Tree */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 font-mono relative z-10">
+        {/* Navigation */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-6 relative z-10">
             
-            {/* Search Mockup */}
-            <div className="border-2 border-black bg-white p-2 flex items-center gap-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transform -rotate-1 hover:rotate-0 transition-transform">
-                <Search className="w-4 h-4 text-muted-foreground" />
+            {/* Search - Rounded */}
+            <div className="bg-white p-2 flex items-center gap-2 rounded-full border border-border/50 shadow-sm">
+                <Search className="w-3.5 h-3.5 text-muted-foreground ml-1" />
                 <input 
                     type="text" 
-                    placeholder="SEARCH_LOGS..." 
-                    className="w-full bg-transparent border-none outline-none text-sm placeholder:text-muted-foreground font-bold"
+                    placeholder="Search..." 
+                    className="w-full bg-transparent border-none outline-none text-xs font-medium placeholder:text-muted-foreground/70"
                 />
             </div>
 
             <div>
-                <h2 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider flex items-center gap-2 border-b-2 border-dashed border-muted-foreground/30 pb-2">
-                    <FolderOpen className="w-4 h-4" /> DIRECTORY_TREE
+                <h2 className="text-[10px] font-bold text-muted-foreground mb-2 uppercase tracking-wider flex items-center gap-1.5 px-2">
+                    <FolderHeart className="w-3.5 h-3.5" /> Categories
                 </h2>
                 <div className="space-y-1">
                     <button
                         type="button"
                         onClick={() => setSelectedCategory(null)}
-                        className={`w-full text-left px-3 py-2 border-2 transition-all font-bold text-sm cursor-pointer flex items-center gap-2 group relative ${
+                        className={`w-full text-left px-3 py-2 rounded-lg transition-all text-xs font-bold cursor-pointer flex items-center gap-2 relative ${
                             selectedCategory === null
-                            ? "bg-white border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] translate-x-1"
-                            : "border-transparent hover:border-black/50 text-muted-foreground hover:text-foreground hover:translate-x-1"
+                            ? "bg-[#D4B2FF] text-white shadow-sm"
+                            : "text-foreground/70 hover:bg-[#F3E5F5] hover:text-primary"
                         }`}
                     >
-                        <span className={`w-1.5 h-1.5 rounded-full transition-colors ${selectedCategory === null ? 'bg-black' : 'bg-muted-foreground/50 group-hover:bg-black'}`}></span>
-                        [ROOT] / ALL_LOGS
+                        <div className={`w-1.5 h-1.5 rounded-full ${selectedCategory === null ? 'bg-white' : 'bg-border'}`}></div>
+                        All Posts
                     </button>
                     
                     {categories.map((category) => (
@@ -96,14 +94,14 @@ export function BlogList({ posts, categories }: BlogListProps) {
                             key={category}
                             type="button"
                             onClick={() => setSelectedCategory(category)}
-                            className={`w-full text-left px-3 py-2 border-2 transition-all font-bold text-sm cursor-pointer flex items-center gap-2 group relative ${
+                            className={`w-full text-left px-3 py-2 rounded-lg transition-all text-xs font-bold cursor-pointer flex items-center gap-2 relative ${
                                 selectedCategory === category
-                                ? "bg-white border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] translate-x-1"
-                                : "border-transparent hover:border-black/50 text-muted-foreground hover:text-foreground hover:translate-x-1"
+                                ? "bg-[#D4B2FF] text-white shadow-sm"
+                                : "text-foreground/70 hover:bg-[#F3E5F5] hover:text-primary"
                             }`}
                         >
-                             <ChevronRight className={`w-4 h-4 transition-transform ${selectedCategory === category ? 'rotate-90' : 'opacity-50 group-hover:opacity-100'}`} />
-                            {category.toUpperCase()}
+                             <ChevronRight className={`w-3 h-3 transition-transform ${selectedCategory === category ? 'rotate-90 text-white' : 'opacity-30'}`} />
+                            {category}
                         </button>
                     ))}
                 </div>
@@ -111,112 +109,104 @@ export function BlogList({ posts, categories }: BlogListProps) {
         </div>
         
         {/* Footer Status */}
-        <div className="p-4 border-t-4 border-black bg-black text-white font-mono text-[10px] flex justify-between items-center relative z-20">
-            <span>MEM: 64KB OK</span>
-            <div className="flex gap-2">
+        <div className="p-3 border-t border-border/30 bg-white/50 text-[10px] font-medium text-muted-foreground flex justify-between items-center">
+            <span>Senny OS v2.5</span>
+            <div className="flex gap-1.5">
                 <Wifi className="w-3 h-3" />
-                <Battery className="w-3 h-3" />
+                <Battery className="w-3 h-3 text-primary" />
             </div>
         </div>
       </aside>
 
-      {/* Main Content Area - Fixed height with internal scroll */}
-      <main className="flex-1 h-screen overflow-y-auto relative z-0 bg-[#F0F0F0] pb-24 md:pb-0">
-        {/* Content Container */}
-        <div className="p-6 md:p-12 max-w-6xl mx-auto min-h-full flex flex-col">
+      {/* Main Content Area */}
+      <main className="flex-1 md:h-screen overflow-y-auto relative z-0 bg-[#FDF0F6] pb-20 md:pb-0 scrollbar-hide">
+        <div className="p-4 md:p-8 max-w-4xl mx-auto min-h-full flex flex-col">
             
-            {/* Sticky Header inside Main */}
-            <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-4 border-black pb-6 sticky top-0 bg-[#F0F0F0]/95 backdrop-blur z-10 pt-6">
+            {/* Header */}
+            <div className="mb-6 flex items-end justify-between gap-4 border-b-2 border-border/20 pb-4 sticky top-0 bg-[#FDF0F6]/90 backdrop-blur-sm z-10 pt-4">
                 <div>
-                    <div className="text-xs font-mono text-muted-foreground mb-1 flex items-center gap-1">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        CURRENT_DIRECTORY //
+                    <div className="text-[10px] font-bold text-muted-foreground mb-1 flex items-center gap-1 uppercase tracking-wider">
+                        <Star className="w-3 h-3 text-primary" />
+                        Current Directory
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-stroke-white drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] text-black" data-text={selectedCategory || "ALL_LOGS"}>
-                        {selectedCategory || "ALL_LOGS"}
+                    <h1 className="text-2xl md:text-3xl font-black text-foreground tracking-tight" data-text={selectedCategory || "All Logs"}>
+                        {selectedCategory || "All Logs"}
                     </h1>
                 </div>
-                <Badge variant="outline" className="font-mono bg-secondary text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm py-1 px-3">
-                    {filteredPosts.length} FILES_FOUND
+                <Badge variant="secondary" className="font-mono bg-white text-primary border border-primary/20 text-xs px-2 shadow-sm">
+                    {filteredPosts.length} posts
                 </Badge>
             </div>
 
-            {/* Posts Grid */}
-            <div className="grid gap-8 pb-12">
+            {/* Posts Grid - Compact List */}
+            <div className="space-y-3 pb-10">
               {filteredPosts.length > 0 ? (
-                  filteredPosts.map((post, index) => (
+                  filteredPosts.map((post) => (
                     <Link
                       key={post.slug}
                       href={`/blog/${post.slug}`}
-                      className="block group relative"
+                      className="block group"
                     >
-                      {/* Tape Decoration for odd/even items */}
-                      <div className={`absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-yellow-200/80 border border-yellow-400/50 shadow-sm transform ${index % 2 === 0 ? 'rotate-2' : '-rotate-1'} z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-
-                      <Card className="overflow-hidden border-2 border-black shadow-plastic hover:shadow-plastic-hover bg-card transition-all duration-300 rounded-none group-hover:-translate-y-1 group-hover:rotate-[0.5deg]">
-                        <div className="flex flex-col md:flex-row h-auto md:h-64">
-                          {/* Thumbnail */}
-                          <div className="w-full md:w-2/5 relative bg-muted border-b-2 md:border-b-0 md:border-r-2 border-black overflow-hidden group-hover:border-r-4 transition-all">
+                      <Card className="overflow-hidden border border-border/40 bg-white hover:border-primary/50 hover:shadow-[0_4px_12px_rgba(212,178,255,0.2)] transition-all duration-300 rounded-xl group-hover:-translate-y-0.5">
+                        <div className="flex h-28 md:h-32">
+                          {/* Thumbnail - Compact */}
+                          <div className="w-28 md:w-40 relative bg-muted border-r border-border/10 overflow-hidden shrink-0">
                             <Image
                               src={post.thumbnail}
                               alt={post.title}
                               fill
-                              className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                             />
-                            <div className="absolute top-0 left-0 bg-black/50 text-white text-[10px] font-mono px-2 py-1 pointer-events-none">
-                                IMG_{index + 1}.JPG
-                            </div>
                           </div>
 
                           {/* Content */}
-                          <div className="flex-1 p-6 md:p-8 flex flex-col justify-between relative bg-white group-hover:bg-[#FAFAFA] transition-colors">
+                          <div className="flex-1 p-3 md:p-4 flex flex-col justify-center relative">
                             
-                            <div>
-                                <div className="flex items-center gap-2 mb-3">
+                            <div className="flex justify-between items-start mb-1">
+                                <div className="flex items-center gap-2">
                                     <Badge
-                                        variant="outline"
-                                        className="rounded-none border-black text-[10px] font-bold px-1.5 bg-accent text-white shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
+                                        variant="secondary"
+                                        className="rounded-md text-[9px] font-bold px-1.5 py-0 bg-[#F3E5F5] text-primary border-none"
                                     >
-                                        {post.category.toUpperCase()}
+                                        {post.category}
                                     </Badge>
-                                    <span className="text-xs font-mono text-muted-foreground flex items-center gap-1 bg-muted px-1 border border-muted-foreground/20">
-                                        <Calendar className="w-3 h-3" />
+                                    <span className="text-[10px] text-muted-foreground font-medium">
                                         {formatDate(post.date)}
                                     </span>
                                 </div>
-                                
-                                <h2 className="text-2xl md:text-3xl font-black text-foreground uppercase tracking-tight mb-3 group-hover:text-primary transition-colors line-clamp-2 leading-[0.9]">
+                            </div>
+                            
+                            <h2 className="text-base md:text-lg font-bold text-foreground leading-tight mb-1.5 group-hover:text-primary transition-colors line-clamp-1">
                                 {post.title}
-                                </h2>
-                                {post.introduction && (
-                                <p className="text-sm text-muted-foreground font-mono mb-4 line-clamp-2 border-l-4 border-muted pl-3 italic">
-                                    "{post.introduction}"
+                            </h2>
+                            
+                            {post.introduction && (
+                                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-2">
+                                    {post.introduction}
                                 </p>
-                                )}
-                            </div>
+                            )}
 
-                            <div className="flex justify-between items-end mt-4 border-t-2 border-dashed border-muted-foreground/20 pt-4">
-                                <div className="flex gap-1 flex-wrap">
-                                    {post.tags?.slice(0, 3).map(tag => (
-                                        <span key={tag} className="text-[10px] font-mono text-muted-foreground hover:text-black cursor-help">
-                                            #{tag}
-                                        </span>
-                                    ))}
-                                </div>
-                                <Button size="sm" className="rounded-none border-2 border-black bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white font-bold text-xs h-8 transition-all uppercase">
-                                    Access File <ArrowRight className="ml-1 w-3 h-3" />
-                                </Button>
+                            <div className="flex gap-1 mt-auto">
+                                {post.tags?.slice(0, 3).map(tag => (
+                                    <span key={tag} className="text-[9px] text-muted-foreground/60 bg-gray-50 px-1.5 rounded border border-gray-100">
+                                        #{tag}
+                                    </span>
+                                ))}
                             </div>
+                          </div>
+                          
+                          {/* Arrow Action */}
+                          <div className="w-10 flex items-center justify-center border-l border-border/10 text-muted-foreground/30 group-hover:text-primary group-hover:bg-[#F3E5F5]/30 transition-colors">
+                             <ArrowRight className="w-4 h-4" />
                           </div>
                         </div>
                       </Card>
                     </Link>
                   ))
               ) : (
-                  <div className="border-4 border-dashed border-black/20 p-16 text-center bg-muted/10 rounded-xl">
-                      <FolderOpen className="w-16 h-16 mx-auto mb-4 text-muted-foreground/30" />
-                      <p className="font-mono text-xl font-black text-muted-foreground/50">NO_FILES_FOUND</p>
-                      <p className="text-sm text-muted-foreground/50 mt-2">The requested directory is empty.</p>
+                  <div className="border-2 border-dashed border-border/30 p-10 text-center bg-white/30 rounded-xl">
+                      <FolderHeart className="w-10 h-10 mx-auto mb-2 text-muted-foreground/30" />
+                      <p className="font-bold text-sm text-muted-foreground">Nothing found here...</p>
                   </div>
               )}
             </div>

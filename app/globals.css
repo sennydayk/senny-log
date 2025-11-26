@@ -1,64 +1,124 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'SUITE';
+  src: url('/fonts/SUITE-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SUITE';
+  src: url('/fonts/SUITE-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SUITE';
+  src: url('/fonts/SUITE-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SUITE';
+  src: url('/fonts/SUITE-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SUITE';
+  src: url('/fonts/SUITE-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SUITE';
+  src: url('/fonts/SUITE-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SUITE';
+  src: url('/fonts/SUITE-Heavy.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* Neo-Cassette Futurism - Atomic & Acid */
+  /* Lovely Kitsch Compact - Pink & Purple Palette */
   
   /* Colors */
-  --color-background: #F0F0F0;
-  --color-foreground: #111111;
-  --color-card: #FFFFFF;
-  --color-card-foreground: #111111;
-  --color-popover: #FFFFFF;
-  --color-popover-foreground: #111111;
-  --color-primary: #8B5CF6;
-  --color-primary-foreground: #FFFFFF;
-  --color-secondary: #CCFF00;
-  --color-secondary-foreground: #000000;
-  --color-accent: #FF0099;
-  --color-accent-foreground: #FFFFFF;
-  --color-muted: #E5E5E5;
-  --color-muted-foreground: #666666;
-  --color-destructive: #FF3333;
-  --color-destructive-foreground: #FFFFFF;
-  --color-border: #111111;
-  --color-input: #FFFFFF;
-  --color-ring: #8B5CF6;
+  --color-background: #FDF0F6; /* Soft Pink White */
+  --color-foreground: #2D0A31; /* Deep Purple Text */
   
-  /* Radius */
-  --radius: 0.5rem;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #2D0A31;
+  
+  --color-popover: #FFFFFF;
+  --color-popover-foreground: #2D0A31;
+  
+  /* Primary: Hot Pink */
+  --color-primary: #FF66B3; 
+  --color-primary-foreground: #FFFFFF;
+  
+  /* Secondary: Lavender Purple (Replacing Lime) */
+  --color-secondary: #D4B2FF; 
+  --color-secondary-foreground: #2D0A31;
+  
+  /* Accent: Soft Blue/Cyan for cool contrast */
+  --color-accent: #A0E7E5;
+  --color-accent-foreground: #000000;
+  
+  --color-muted: #F3E5F5; /* Pale Purple */
+  --color-muted-foreground: #8E44AD;
+  
+  --color-destructive: #FF4081;
+  --color-destructive-foreground: #FFFFFF;
+  
+  --color-border: #4A154B; /* Dark Purple Border instead of Black */
+  --color-input: #FFFFFF;
+  --color-ring: #FF66B3;
+  
+  /* Radius - Slightly reduced but still round */
+  --radius: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
   --radius-lg: 1rem;
   
-  /* Shadows - Custom */
-  --shadow-plastic: 4px 4px 0px 0px #000000;
-  --shadow-plastic-hover: 2px 2px 0px 0px #000000;
+  /* Shadows - Softer Pop */
+  --shadow-plastic: 3px 3px 0px 0px #4A154B;
+  --shadow-plastic-hover: 1px 1px 0px 0px #4A154B;
+  --shadow-pop: 4px 4px 0px 0px #FF66B3, 8px 8px 0px 0px #D4B2FF;
   
   /* Font families */
   --font-mono: var(--font-geist-mono), "Courier New", Courier, monospace;
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "SUITE", ui-sans-serif, system-ui, sans-serif;
 }
 
 .dark {
-  --color-background: #050505;
-  --color-foreground: #00FF41;
-  --color-card: #0A0A0A;
-  --color-card-foreground: #E0E0E0;
-  --color-popover: #0A0A0A;
-  --color-popover-foreground: #E0E0E0;
-  --color-primary: #BD00FF;
-  --color-primary-foreground: #FFFFFF;
-  --color-secondary: #CCFF00;
-  --color-secondary-foreground: #000000;
-  --color-accent: #00FFFF;
-  --color-accent-foreground: #000000;
-  --color-destructive: #FF0055;
-  --color-destructive-foreground: #FFFFFF;
-  --color-border: #333333;
-  --color-input: #111111;
-  --color-ring: #BD00FF;
+  /* Dark Mode: Deep Cyber Violet */
+  --color-background: #1A0B2E;
+  --color-foreground: #F3E5F5;
+  --color-card: #2D1B4E;
+  --color-card-foreground: #FFFFFF;
+  --color-primary: #FF66B3;
+  --color-secondary: #9D4EDD;
+  --color-muted: #3C2A5A;
+  --color-border: #E0B0FF;
 }
 
 @layer base {
@@ -68,78 +128,67 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: var(--font-mono);
+    font-family: var(--font-sans); /* Default to Sans for cleaner look */
     overflow-x: hidden;
-    /* Dot Matrix Background Pattern */
-    background-image: radial-gradient(#888 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(255, 102, 179, 0.08), transparent 25%), 
+        radial-gradient(circle at 85% 30%, rgba(212, 178, 255, 0.1), transparent 25%);
   }
 }
 
 @layer utilities {
+  .font-display {
+    font-family: var(--font-mono); /* Use mono for titles/accents */
+  }
+
   .shadow-plastic {
-    box-shadow: 4px 4px 0px 0px #000000;
+    box-shadow: 3px 3px 0px 0px var(--color-border);
   }
   
   .shadow-plastic-hover {
-    box-shadow: 2px 2px 0px 0px #000000;
+    box-shadow: 1px 1px 0px 0px var(--color-border);
+  }
+
+  .shadow-pop {
+    box-shadow: 4px 4px 0px 0px var(--color-primary), 7px 7px 0px 0px var(--color-secondary);
   }
   
-  .crt-overlay {
-    background: linear-gradient(
-      rgba(18, 16, 16, 0) 50%,
-      rgba(0, 0, 0, 0.1) 50%
-    );
-    background-size: 100% 4px;
-    pointer-events: none;
-  }
-  
-  .glitch-text {
-    position: relative;
-  }
-  .glitch-text::before,
-  .glitch-text::after {
-    content: attr(data-text);
-    position: absolute;
+  /* Grain Texture Overlay - Lighter */
+  .grain-overlay {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-  }
-  .glitch-text::before {
-    left: 2px;
-    text-shadow: -1px 0 #ff00c1;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim 5s infinite linear alternate-reverse;
-  }
-  .glitch-text::after {
-    left: -2px;
-    text-shadow: -1px 0 #00fff9;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim2 5s infinite linear alternate-reverse;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
   
+  .text-stroke-white {
+    -webkit-text-stroke: 1.5px white;
+    paint-order: stroke fill;
+  }
+
+  .text-stroke-purple {
+    -webkit-text-stroke: 1px #4A154B;
+    paint-order: stroke fill;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
   .animate-marquee {
-    animation: marquee 20s linear infinite;
+    animation: marquee 25s linear infinite;
   }
 }
 
-@keyframes glitch-anim {
-  0% { clip: rect(30px, 9999px, 10px, 0); }
-  20% { clip: rect(80px, 9999px, 90px, 0); }
-  40% { clip: rect(10px, 9999px, 50px, 0); }
-  60% { clip: rect(60px, 9999px, 20px, 0); }
-  80% { clip: rect(40px, 9999px, 70px, 0); }
-  100% { clip: rect(20px, 9999px, 80px, 0); }
-}
-
-@keyframes glitch-anim2 {
-  0% { clip: rect(10px, 9999px, 80px, 0); }
-  20% { clip: rect(70px, 9999px, 20px, 0); }
-  40% { clip: rect(30px, 9999px, 10px, 0); }
-  60% { clip: rect(90px, 9999px, 60px, 0); }
-  80% { clip: rect(20px, 9999px, 40px, 0); }
-  100% { clip: rect(50px, 9999px, 30px, 0); }
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
 }
 
 @keyframes marquee {
