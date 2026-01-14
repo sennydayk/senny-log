@@ -12,79 +12,59 @@ type RecentPostsCardProps = {
   posts: BlogPostMetadata[];
 };
 
-export function RecentPostsCard({ posts }: RecentPostsCardProps) {
+export default function RecentPostsCard({ posts = [] }: RecentPostsCardProps) {
   return (
-    <Card
-      id="blog"
-      className="md:col-span-2 lg:col-span-3 p-6 pb-8 bg-[#7657fe] border border-border relative overflow-hidden rounded-2xl shadow-none"
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-3 h-3 rounded-full bg-[#6acdff] animate-pulse"></div>
-          <h3 className="font-extrabold text-white font-sans">
-            Recent Posts
-          </h3>
-        </div>
-        <Link href="/blog">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="font-sans font-bold text-sm text-white hover:cursor-pointer group"
-          >
-            View All Posts
-            <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-2 transition-all duration-200" />
-          </Button>
-        </Link>
-      </div>
-      <div className="space-y-2 pb-4">
-        {posts.map((post) => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {posts.length === 0 ? (
+           <div className="col-span-3 p-8 text-center font-mono text-muted-foreground bg-white/50 rounded-xl border-2 border-dashed border-border/30">
+              No posts yet... ✨
+           </div>
+        ) : (
+           posts.map((post) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="block cursor-pointer group"
+            className="block group"
           >
-            <div className="flex items-start gap-4 p-2">
+            <Card className="h-full overflow-hidden border-2 border-border/50 hover:border-primary bg-white hover:shadow-[4px_4px_0px_#D4B2FF] transition-all duration-300 rounded-xl group-hover:-translate-y-1">
               {/* Thumbnail */}
-              <div className="w-24 h-24 relative bg-muted flex-shrink-0 rounded-lg overflow-hidden">
+              <div className="relative aspect-[16/10] bg-muted overflow-hidden">
                 <Image
                   src={post.thumbnail}
                   alt={post.title}
                   fill
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                 />
+                <div className="absolute top-2 left-2">
+                    <Badge className="bg-white/90 text-foreground text-[10px] font-bold px-2 py-0.5 border border-border/20 shadow-sm backdrop-blur-sm">
+                        {post.category}
+                    </Badge>
+                </div>
               </div>
 
               {/* Content */}
-              <div className="flex-1 min-w-0">
-                <h4 className="font-extrabold font-sans mb-1 text-white group-hover:text-white/80 transition-colors">
+              <div className="p-4 flex flex-col gap-2">
+                <span className="text-[10px] font-mono text-muted-foreground flex items-center gap-1">
+                    <Calendar className="w-3 h-3" />
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric"
+                    })}
+                </span>
+                
+                <h4 className="font-bold text-base leading-tight text-foreground line-clamp-2 group-hover:text-primary transition-colors">
                   {post.title}
                 </h4>
+                
                 {post.introduction && (
-                  <p className="text-sm font-bold text-white/80 mb-2 font-sans line-clamp-2">
+                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
                     {post.introduction}
                   </p>
                 )}
-                <div className="flex items-center gap-2 font-bold text-xs text-white/70">
-                  <Calendar className="w-3 h-3" />
-                  <span className="font-sans">
-                    {new Date(post.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </span>
-                  <Badge
-                    variant="outline"
-                    className="text-xs font-sans font-bold rounded-full ml-2 text-white border-white/30"
-                  >
-                    {post.category}
-                  </Badge>
-                </div>
               </div>
-            </div>
+            </Card>
           </Link>
-        ))}
-      </div>
-    </Card>
+        )))}
+    </div>
   );
 }
