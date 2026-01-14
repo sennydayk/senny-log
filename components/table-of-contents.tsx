@@ -92,10 +92,7 @@ export function TableOfContents({ content }: TableOfContentsProps) {
 
   return (
     <nav className="space-y-1">
-      <h4 className="text-sm font-semibold text-card-foreground mb-3 font-sans">
-        목차
-      </h4>
-      <ul className="space-y-2">
+      <ul className="space-y-1.5">
         {headings.map(({ id, text, level }) => (
           <li
             key={id}
@@ -105,11 +102,11 @@ export function TableOfContents({ content }: TableOfContentsProps) {
             <button
               onClick={() => handleClick(id)}
               className={`
-                text-left w-full transition-colors hover:text-primary dark:hover:text-primary font-sans
+                text-left w-full transition-all duration-200 hover:text-primary dark:hover:text-primary font-sans leading-relaxed
                 ${
                   activeId === id
-                    ? "text-primary dark:text-primary font-bold"
-                    : "text-muted-foreground cursor-pointer"
+                    ? "text-primary dark:text-primary font-medium"
+                    : "text-muted-foreground/80 hover:text-muted-foreground cursor-pointer"
                 }
               `}
             >

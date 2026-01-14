@@ -14,7 +14,7 @@ export default async function Home() {
     { label: 'PROJECTS', href: '/projects', icon: <Zap className="w-5 h-5" /> },
     { label: 'ABOUT', href: '/about', icon: <Heart className="w-5 h-5" /> },
     { label: 'GUESTBOOK', href: '/guestbook', icon: <Star className="w-5 h-5" /> },
-    { label: 'CONTACT', href: 'mailto:contact@example.com', icon: <div className="font-black text-sm">@</div> },
+    { label: 'CONTACT', href: '/contact', icon: <div className="font-black text-sm">@</div> },
   ];
 
   return (
@@ -95,16 +95,6 @@ export default async function Home() {
                         I write code, design things, and collect memories.
                     </p>
 
-                    <div className="flex gap-3">
-                        <Link href="/blog">
-                            <Button className="bg-primary hover:bg-primary/90 text-white border-2 border-border h-10 px-6 text-sm font-bold rounded-full shadow-[2px_2px_0px_#4A154B] hover:translate-y-[1px] hover:shadow-none transition-all">
-                                Explore Logs <ArrowRight className="ml-1 w-4 h-4" />
-                            </Button>
-                        </Link>
-                        <Button variant="ghost" className="text-foreground hover:bg-secondary/20 h-10 px-6 text-sm font-bold rounded-full border-2 border-transparent hover:border-secondary transition-all">
-                            View Resume
-                        </Button>
-                    </div>
                 </div>
           </div>
 
@@ -134,11 +124,18 @@ export default async function Home() {
 
       {/* Recent Logs Section */}
       <section className="space-y-4 py-4">
-        <div className="flex items-center gap-2 border-b-2 border-border/30 pb-2">
-           <Layers className="w-5 h-5 text-primary" />
-           <h2 className="text-xl font-black text-foreground">
-             RECENT LOGS
-           </h2>
+        <div className="flex items-center justify-between border-b-2 border-border/30 pb-2">
+           <div className="flex items-center gap-2">
+             <Layers className="w-5 h-5 text-primary" />
+             <h2 className="text-xl font-black text-foreground">
+               RECENT LOGS
+             </h2>
+           </div>
+           <Link href="/blog">
+             <Button className="bg-primary hover:bg-primary/90 text-white border-2 border-border h-9 px-5 text-sm font-bold rounded-full shadow-[2px_2px_0px_#4A154B] hover:translate-y-[1px] hover:shadow-none transition-all">
+               Explore Logs <ArrowRight className="ml-1 w-4 h-4" />
+             </Button>
+           </Link>
         </div>
         
         <div className="w-full">
