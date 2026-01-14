@@ -34,23 +34,23 @@ export default function RootLayout({
           {/* Global Grain/Noise Texture */}
           <div className="grain-overlay"></div>
 
-          {/* Main Device Casing - Lovely Compact Style */}
-          <div className="w-full max-w-6xl min-h-[90vh] bg-background/95 backdrop-blur-md border-2 border-border rounded-[1.5rem] shadow-[4px_4px_0px_0px_rgba(74,21,75,0.2),8px_8px_0px_0px_rgba(255,102,179,0.2)] relative overflow-hidden flex flex-col z-10">
+          {/* Main Device Casing - Glass Style */}
+          <div className="w-full max-w-6xl min-h-[90vh] bg-white/20 dark:bg-black/40 backdrop-blur-3xl border border-white/20 dark:border-white/5 rounded-[2.5rem] shadow-2xl relative overflow-hidden flex flex-col z-10 transition-all duration-500">
             
             {/* Top Bar */}
-            <header className="h-12 border-b-2 border-border bg-[#F3E5F5] flex items-center justify-between px-4 sticky top-0 z-50">
+            <header className="h-14 border-b border-white/10 dark:border-white/5 bg-white/20 dark:bg-black/20 backdrop-blur-xl flex items-center justify-between px-6 sticky top-0 z-50">
               <div className="flex items-center gap-2">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-[#FF66B3] border border-border"></div>
-                  <div className="w-3 h-3 rounded-full bg-[#D4B2FF] border border-border"></div>
-                  <div className="w-3 h-3 rounded-full bg-[#A0E7E5] border border-border"></div>
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-400/60 shadow-inner"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-400/60 shadow-inner"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-400/60 shadow-inner"></div>
                 </div>
-                <span className="ml-2 font-display font-bold text-sm text-foreground/80 tracking-tight">
-                  Senny.os <span className="text-primary text-xs">♥</span>
+                <span className="ml-4 font-display font-bold text-sm text-foreground/70 tracking-tight flex items-center gap-2">
+                  Senny.os <span className="text-primary text-xs opacity-50">v2.0</span>
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                 <div className="hidden md:block overflow-hidden w-40 bg-white/50 border border-border rounded-full px-3 py-0.5 text-[10px] font-bold text-muted-foreground">
+                 <div className="hidden md:block overflow-hidden w-48 bg-black/5 dark:bg-white/10 border border-white/10 rounded-full px-4 py-1 text-[10px] font-medium text-muted-foreground backdrop-blur-md shadow-inner">
                     <div className="animate-marquee whitespace-nowrap">
                       Have a Lovely Day! ✨ Keep Recording... 💜
                     </div>
@@ -60,13 +60,13 @@ export default function RootLayout({
             </header>
 
             {/* Main Screen Content */}
-            <main className="flex-1 overflow-y-auto relative scrollbar-hide">
+            <main className="flex-1 overflow-y-auto relative scrollbar-hide p-1">
               {children}
             </main>
             
             {/* Footer */}
-            <footer className="h-8 bg-[#F3E5F5] text-muted-foreground text-[10px] flex items-center justify-center font-medium border-t-2 border-border">
-              Built with <span className="text-destructive mx-1">♥</span> by Senny
+            <footer className="h-10 bg-white/20 dark:bg-black/20 backdrop-blur-xl text-muted-foreground text-[10px] flex items-center justify-center font-medium border-t border-white/10 dark:border-white/5">
+              Built with <span className="text-primary mx-1">♥</span> by Senny
             </footer>
           </div>
         </ThemeProvider>
