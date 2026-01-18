@@ -1,0 +1,39 @@
+{
+  "commands": {
+    "pr": {
+      "description": "Create PR with template",
+      "template": "pr-template.md",
+      "script": "scripts/create-pr.js"
+    },
+    "blog": {
+      "description": "Create new blog post",
+      "template": "blog-template.md",
+      "script": "scripts/create-blog.js"
+    },
+    "deploy": {
+      "description": "Deploy to production",
+      "script": "scripts/deploy.js"
+    },
+    "component": {
+      "description": "Create React component with tests and stories",
+      "script": "scripts/create-component.js"
+    },
+    "api": {
+      "description": "Create API endpoint with types and tests",
+      "script": "scripts/create-api.js"
+    },
+    "test": {
+      "description": "Run tests with options",
+      "script": "scripts/run-tests.js"
+    }
+  },
+  "templates": {
+    "pr": {
+      "title": "feat: {{feature_name}}",
+      "body": "## Summary\n\n{{description}}\n\n## Changes\n\n- {{changes}}\n\n## Testing\n\n- {{testing}}"
+    },
+    "blog": {
+      "frontmatter": "---\ntitle: {{title}}\ndate: {{date}}\ntags: {{tags}}\n---\n\n{{content}}"
+    }
+  }
+}

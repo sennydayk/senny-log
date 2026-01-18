@@ -75,8 +75,14 @@ export function getAllPosts(): BlogPost[] {
 export async function getPostBySlugWithNotion(
   slug: string
 ): Promise<BlogPost | null> {
-  const posts = await getAllPostsWithNotion();
-  return posts.find((p) => p.slug === slug) ?? null;
+  // 노션 API가 설정되어 있으면 해당 slug만 직접 조회 (최적화)
+  if (process.env.NOTION_API_KEY && process.env.NOTION_DATABASE_ID) {
+    const { getNotionPostBySlug } = await import("./notion");
+    const notionPost = await getNotionPostBySlug(slug);
+    if (notionPost) return notionPost;
+  }
+  // 로컬 포스트에서 찾기
+  return BLOG_POSTS.find((p) => p.slug === slug) ?? null;
 }
 
 export function getPostBySlug(slug: string): BlogPost | null {

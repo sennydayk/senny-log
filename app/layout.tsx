@@ -3,6 +3,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Sparkles, Heart } from "lucide-react";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -51,8 +52,8 @@ export default function RootLayout({
               </div>
               <div className="flex items-center gap-3">
                  <div className="hidden md:block overflow-hidden w-48 bg-black/5 dark:bg-white/10 border border-white/10 rounded-full px-4 py-1 text-[10px] font-medium text-muted-foreground backdrop-blur-md shadow-inner">
-                    <div className="animate-marquee whitespace-nowrap">
-                      Have a Lovely Day! ✨ Keep Recording... 💜
+                    <div className="animate-marquee whitespace-nowrap flex items-center gap-2">
+                      Have a Lovely Day! <Sparkles className="w-3 h-3 inline text-yellow-400" /> Keep Recording... <Heart className="w-3 h-3 inline text-red-400" />
                     </div>
                  </div>
                 <ThemeToggle />
@@ -66,7 +67,7 @@ export default function RootLayout({
             
             {/* Footer */}
             <footer className="h-10 bg-white/20 dark:bg-black/20 backdrop-blur-xl text-muted-foreground text-[10px] flex items-center justify-center font-medium border-t border-white/10 dark:border-white/5">
-              Built with <span className="text-primary mx-1">♥</span> by Senny
+              Built with <Heart className="w-3 h-3 text-primary mx-1 fill-primary" /> by Senny
             </footer>
           </div>
         </ThemeProvider>

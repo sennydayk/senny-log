@@ -126,7 +126,6 @@ export function BlogList({ posts, categories }: BlogListProps) {
             <div className="mb-6 flex items-end justify-between gap-4 border-b border-white/10 dark:border-white/5 pb-4 sticky top-0 bg-white/20 dark:bg-[#1C1C1E]/60 backdrop-blur-2xl z-10 pt-4 rounded-b-[1.5rem] px-4 -mx-4">
                 <div>
                     <div className="text-[10px] font-bold text-muted-foreground/60 mb-1 flex items-center gap-1 uppercase tracking-wider">
-                        <Star className="w-3 h-3 text-primary/70" />
                         Current Directory
                     </div>
                     <h1 className="text-2xl md:text-3xl font-black text-foreground/90 tracking-tight" data-text={selectedCategory || "All Logs"}>
