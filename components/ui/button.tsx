@@ -9,15 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground shadow-retro-plate border-b-2 border-r-2 border-primary-foreground/20 hover:brightness-110',
+        default: 'bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20 border border-white/20 backdrop-blur-sm hover:bg-primary hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300',
         destructive:
-          'bg-destructive text-destructive-foreground shadow-retro-plate border-b-2 border-r-2 border-destructive-foreground/20 hover:brightness-110',
+          'bg-destructive text-destructive-foreground shadow-lg shadow-destructive/20 border border-white/20 hover:bg-destructive/90 hover:shadow-destructive/40 hover:-translate-y-0.5 transition-all duration-300',
         outline:
-          'bg-transparent border border-border text-foreground hover:bg-accent hover:text-accent-foreground hover:shadow-glow hover:border-accent transition-shadow duration-300',
+          'bg-transparent border border-input text-foreground hover:bg-accent hover:text-accent-foreground hover:border-accent hover:shadow-md transition-all duration-300',
         secondary:
-          'bg-secondary text-secondary-foreground shadow-retro-plate border-b-2 border-r-2 border-secondary-foreground/20 hover:brightness-110',
-        ghost: 'hover:bg-accent hover:text-accent-foreground hover:shadow-glow',
-        link: 'text-primary underline-offset-4 hover:underline decoration-2 decoration-primary/50',
+          'bg-secondary/80 text-secondary-foreground shadow-lg shadow-secondary/20 border border-white/20 backdrop-blur-sm hover:bg-secondary hover:shadow-secondary/40 hover:-translate-y-0.5 transition-all duration-300',
+        ghost: 'hover:bg-accent/50 hover:text-accent-foreground',
+        link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-10 px-4 py-2',

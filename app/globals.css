@@ -62,47 +62,49 @@
   /* Lovely Kitsch Compact - Pink & Purple Palette */
   
   /* Colors */
-  --color-background: #FDF0F6; /* Soft Pink White */
-  --color-foreground: #2D0A31; /* Deep Purple Text */
+  --color-background: #EFEFF3; /* Cool Light Grey (iOS Control Center feel) */
+  --color-foreground: #2C2C2E; /* Dark Grey Text */
   
-  --color-card: #FFFFFF;
-  --color-card-foreground: #2D0A31;
+  --color-card: rgba(255, 255, 255, 0.65);
+  --color-card-foreground: #1C1C1E;
   
   --color-popover: #FFFFFF;
-  --color-popover-foreground: #2D0A31;
+  --color-popover-foreground: #2C2C2E;
   
-  /* Primary: Hot Pink */
-  --color-primary: #FF66B3; 
+  /* Primary: Deep Rose (Toned down pink) */
+  --color-primary: #D15688; 
   --color-primary-foreground: #FFFFFF;
   
-  /* Secondary: Lavender Purple (Replacing Lime) */
-  --color-secondary: #D4B2FF; 
-  --color-secondary-foreground: #2D0A31;
+  /* Secondary: Muted Lavender */
+  --color-secondary: #B19CD9; 
+  --color-secondary-foreground: #1C1C1E;
   
-  /* Accent: Soft Blue/Cyan for cool contrast */
-  --color-accent: #A0E7E5;
+  /* Accent: Soft Teal (Toned down) */
+  --color-accent: #88C0C0;
   --color-accent-foreground: #000000;
   
-  --color-muted: #F3E5F5; /* Pale Purple */
-  --color-muted-foreground: #8E44AD;
+  --color-muted: #E5E5EA;
+  --color-muted-foreground: #8E8E93;
   
-  --color-destructive: #FF4081;
+  --color-destructive: #FF3B30;
   --color-destructive-foreground: #FFFFFF;
   
-  --color-border: #4A154B; /* Dark Purple Border instead of Black */
-  --color-input: #FFFFFF;
-  --color-ring: #FF66B3;
+  --color-border: rgba(0, 0, 0, 0.08); /* Darker, subtle border */
+  --color-input: rgba(0, 0, 0, 0.05);
+  --color-ring: #D15688;
   
-  /* Radius - Slightly reduced but still round */
-  --radius: 0.75rem;
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
+  /* Radius */
+  --radius: 1.5rem; /* More rounded */
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
   
-  /* Shadows - Softer Pop */
-  --shadow-plastic: 3px 3px 0px 0px #4A154B;
-  --shadow-plastic-hover: 1px 1px 0px 0px #4A154B;
-  --shadow-pop: 4px 4px 0px 0px #FF66B3, 8px 8px 0px 0px #D4B2FF;
+  /* Shadows - Deep Glass */
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --shadow-glass-sm: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
+  --shadow-plastic: 0 2px 8px 0 rgba(0, 0, 0, 0.05);
+  --shadow-plastic-hover: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+  --shadow-pop: 0 0 15px 0 rgba(209, 86, 136, 0.3), 0 0 30px 0 rgba(177, 156, 217, 0.2);
   
   /* Font families */
   --font-mono: var(--font-geist-mono), "Courier New", Courier, monospace;
@@ -110,15 +112,17 @@
 }
 
 .dark {
-  /* Dark Mode: Deep Cyber Violet */
-  --color-background: #1A0B2E;
-  --color-foreground: #F3E5F5;
-  --color-card: #2D1B4E;
+  /* Dark Mode: Deep Glass - iOS Control Center Style */
+  --color-background: #000000;
+  --color-foreground: #F5F5F7;
+  --color-card: rgba(30, 30, 30, 0.6);
   --color-card-foreground: #FFFFFF;
-  --color-primary: #FF66B3;
-  --color-secondary: #9D4EDD;
-  --color-muted: #3C2A5A;
-  --color-border: #E0B0FF;
+  --color-primary: #D15688;
+  --color-secondary: #9A8C98;
+  --color-muted: #2C2C2E;
+  --color-muted-foreground: #A1A1A6;
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-input: rgba(255, 255, 255, 0.15);
 }
 
 @layer base {
@@ -130,9 +134,12 @@
     color: var(--color-foreground);
     font-family: var(--font-sans); /* Default to Sans for cleaner look */
     overflow-x: hidden;
+    /* Richer gradient for glassmorphism */
     background-image: 
-        radial-gradient(circle at 15% 50%, rgba(255, 102, 179, 0.08), transparent 25%), 
-        radial-gradient(circle at 85% 30%, rgba(212, 178, 255, 0.1), transparent 25%);
+        radial-gradient(circle at 15% 50%, rgba(209, 86, 136, 0.4), transparent 50%), 
+        radial-gradient(circle at 85% 30%, rgba(136, 192, 192, 0.4), transparent 50%),
+        radial-gradient(circle at 50% 80%, rgba(177, 156, 217, 0.4), transparent 50%);
+    background-attachment: fixed;
   }
 }
 
@@ -142,15 +149,24 @@
   }
 
   .shadow-plastic {
-    box-shadow: 3px 3px 0px 0px var(--color-border);
+    box-shadow: var(--shadow-glass-sm);
   }
   
   .shadow-plastic-hover {
-    box-shadow: 1px 1px 0px 0px var(--color-border);
+    box-shadow: var(--shadow-glass);
   }
 
   .shadow-pop {
-    box-shadow: 4px 4px 0px 0px var(--color-primary), 7px 7px 0px 0px var(--color-secondary);
+    box-shadow: var(--shadow-pop);
+  }
+  
+  /* Updated Glass Utilities */
+  .glass-panel {
+    @apply bg-white/40 dark:bg-black/40 backdrop-blur-3xl border border-white/20 dark:border-white/10 shadow-xl rounded-3xl;
+  }
+  
+  .glass-button {
+    @apply bg-white/50 dark:bg-white/10 hover:bg-white/70 dark:hover:bg-white/20 active:scale-95 backdrop-blur-xl border border-white/30 dark:border-white/10 transition-all duration-300 shadow-sm;
   }
   
   /* Grain Texture Overlay - Lighter */
@@ -162,7 +178,7 @@
     height: 100%;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.04;
+    opacity: 0.03;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
   
@@ -183,6 +199,15 @@
   .animate-marquee {
     animation: marquee 25s linear infinite;
   }
+
+  /* Hide scrollbar for horizontal scroll */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @keyframes float {
@@ -194,4 +219,22 @@
 @keyframes marquee {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.06) 0%,
+    rgba(0, 0, 0, 0.03) 20%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(0, 0, 0, 0.03) 80%,
+    rgba(0, 0, 0, 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
 }

@@ -1,0 +1,17 @@
+{
+  "name": "sisyphus-commands",
+  "version": "1.0.0",
+  "description": "Custom command system for Sisyphus AI agent",
+  "main": ".sisyphus/command-runner.js",
+  "bin": {
+    "sisyphus": ".sisyphus/command-runner.js"
+  },
+  "scripts": {
+    "pr": "node .sisyphus/command-runner.js pr",
+    "blog": "node .sisyphus/command-runner.js blog",
+    "deploy": "node .sisyphus/command-runner.js deploy"
+  },
+  "dependencies": {
+    "commander": "^11.0.0"
+  }
+}
