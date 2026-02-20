@@ -64,7 +64,6 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
   // 히트맵을 가장 최근 날짜(오른쪽 끝)로 스크롤
   useEffect(() => {
     if (heatmapScrollRef.current && activeTab === "heatmap") {
-      // 약간의 딜레이를 주어 렌더링이 완료된 후 스크롤
       setTimeout(() => {
         if (heatmapScrollRef.current) {
           heatmapScrollRef.current.scrollLeft =
@@ -75,20 +74,22 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
   }, [activeTab, selectedYear]);
 
   const getHeatmapColor = (count: number) => {
-    if (count === 0) return "#d1d5db"; // 회색
-    if (count === 1) return "#c084fc"; // 연한 보라색
-    if (count === 2) return "#9333ea"; // 중간 보라색
-    return "#7e22ce"; // 진한 보라색
+    if (count === 0) return "var(--color-border)";
+    if (count === 1) return "var(--color-muted-foreground)";
+    if (count === 2) return "var(--color-foreground)";
+    return "var(--color-foreground)";
+  };
+
+  const getHeatmapOpacity = (count: number) => {
+    if (count === 0) return 0.3;
+    if (count === 1) return 0.5;
+    if (count === 2) return 0.75;
+    return 1;
   };
 
   const getCategoryColor = (index: number) => {
-    const colors = [
-      "hsl(var(--primary))",
-      "hsl(var(--primary) / 0.7)",
-      "hsl(var(--primary) / 0.5)",
-      "hsl(var(--primary) / 0.3)",
-    ];
-    return colors[index % colors.length];
+    const opacities = [1, 0.7, 0.5, 0.3];
+    return `color-mix(in srgb, var(--color-foreground) ${(opacities[index % opacities.length]) * 100}%, transparent)`;
   };
 
   // 클라이언트 마운트 전에는 기본 레이아웃만 표시
@@ -96,16 +97,13 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
     return (
       <div className="w-full">
         <div className="mt-3 mb-4">
-          <h3 className="text-md font-bold text-black mb-1 font-sans">
+          <h3 className="text-md font-bold text-foreground mb-1 font-sans">
             Blog Activity
           </h3>
-          <p className="text-xs text-[#525252] font-sans">
-            최근 작성 활동과 카테고리 현황
-          </p>
         </div>
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-muted/20 rounded" />
-          <div className="h-32 bg-muted/20 rounded" />
+          <div className="h-8 bg-secondary rounded" />
+          <div className="h-32 bg-secondary rounded" />
         </div>
       </div>
     );
@@ -115,22 +113,19 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
     <div className="w-full">
       {/* 헤더 */}
       <div className="mt-3 mb-4">
-        <h3 className="text-md font-bold text-black mb-1 font-sans">
+        <h3 className="text-md font-bold text-foreground mb-1 font-sans">
           Blog Activity
         </h3>
-        {/* <p className="text-xs text-[#525252] font-sans">
-          최근 작성 활동과 카테고리 현황
-        </p> */}
       </div>
 
       {/* 탭 */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-0 mb-4 border-b border-border">
         <button
           onClick={() => setActiveTab("heatmap")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs transition-all font-sans text-[#525252] ${
+          className={`flex items-center gap-1.5 px-3 py-2 text-xs transition-colors font-sans relative ${
             activeTab === "heatmap"
-              ? "font-extrabold"
-              : "font-medium cursor-pointer"
+              ? "font-bold text-foreground after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-foreground"
+              : "font-medium text-muted-foreground cursor-pointer hover:text-foreground"
           }`}
         >
           <TrendingUp className="w-3 h-3" />
@@ -138,10 +133,10 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
         </button>
         <button
           onClick={() => setActiveTab("categories")}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs transition-all font-sans text-[#525252] ${
+          className={`flex items-center gap-1.5 px-3 py-2 text-xs transition-colors font-sans relative ${
             activeTab === "categories"
-              ? "font-extrabold"
-              : "font-medium cursor-pointer"
+              ? "font-bold text-foreground after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-foreground"
+              : "font-medium text-muted-foreground cursor-pointer hover:text-foreground"
           }`}
         >
           <BarChart3 className="w-3 h-3" />
@@ -155,19 +150,19 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
           <div className="space-y-4">
             {/* 통계 */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-primary/5 rounded-lg p-3">
-                <div className="text-xs text-[#525252] mb-1 font-sans">
+              <div className="bg-secondary rounded-md p-3 border border-border">
+                <div className="text-xs text-muted-foreground mb-1 font-sans">
                   Total Posts
                 </div>
-                <div className="text-2xl font-bold text-primary font-sans">
+                <div className="text-2xl font-bold text-foreground font-sans">
                   {countUp.total}
                 </div>
               </div>
-              <div className="bg-primary/5 rounded-lg p-3">
-                <div className="text-xs text-[#525252] mb-1 font-sans">
+              <div className="bg-secondary rounded-md p-3 border border-border">
+                <div className="text-xs text-muted-foreground mb-1 font-sans">
                   This Month
                 </div>
-                <div className="text-2xl font-bold text-primary font-sans flex items-center gap-1">
+                <div className="text-2xl font-bold text-foreground font-sans flex items-center gap-1">
                   {countUp.monthly}
                 </div>
               </div>
@@ -180,10 +175,10 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
                   <button
                     key={year}
                     onClick={() => setSelectedYear(year)}
-                    className={`px-2.5 py-1 rounded text-xs transition-all font-sans ${
+                    className={`px-2.5 py-1 rounded-md text-xs transition-colors font-sans ${
                       selectedYear === year
-                        ? "font-bold text-primary"
-                        : "font-medium text-[#525252] cursor-pointer"
+                        ? "font-bold text-foreground bg-secondary border border-border"
+                        : "font-medium text-muted-foreground cursor-pointer hover:text-foreground"
                     }`}
                   >
                     {year}
@@ -196,7 +191,7 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
             <div className="relative">
               <div className="flex items-start gap-2">
                 {/* 연도 레이블 */}
-                <div className="text-xs font-medium text-[#525252] pt-1 font-sans w-10 flex-shrink-0">
+                <div className="text-xs font-medium text-muted-foreground pt-1 font-sans w-10 shrink-0">
                   {selectedYear}
                 </div>
 
@@ -241,20 +236,20 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
                               return (
                                 <div
                                   key={`${weekIndex}-${dayIndex}`}
-                                  className={`w-2.5 h-2.5 !rounded-sm transition-all duration-200 cursor-pointer border border-transparent ${
+                                  className={`w-2.5 h-2.5 rounded-sm transition-all duration-200 cursor-pointer ${
                                     isLoaded
                                       ? "opacity-100 scale-100"
                                       : "opacity-0 scale-0"
                                   } ${
                                     isHovered
-                                      ? "ring-2 ring-primary/50 scale-125 z-10"
+                                      ? "ring-1 ring-foreground/50 scale-125 z-10"
                                       : ""
                                   }`}
                                   style={{
                                     backgroundColor: getHeatmapColor(
                                       cellData?.count || 0
                                     ),
-                                    borderRadius: "0.5rem",
+                                    opacity: getHeatmapOpacity(cellData?.count || 0),
                                     transitionDelay: `${
                                       (weekIndex * 7 + dayIndex) * 2
                                     }ms`,
@@ -280,16 +275,16 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
               </div>
 
               {/* 범례 */}
-              <div className="flex items-center justify-end gap-2 mt-3 text-xs text-[#525252] font-sans">
+              <div className="flex items-center justify-end gap-2 mt-3 text-xs text-muted-foreground font-sans">
                 <span>Less</span>
                 <div className="flex gap-0.5">
                   {[0, 1, 2, 3].map((level) => (
                     <div
                       key={level}
-                      className="w-2.5 h-2.5 !rounded-sm"
+                      className="w-2.5 h-2.5 rounded-sm"
                       style={{
                         backgroundColor: getHeatmapColor(level),
-                        borderRadius: "0.5rem",
+                        opacity: getHeatmapOpacity(level),
                       }}
                     />
                   ))}
@@ -299,16 +294,16 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
             </div>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {stats.categories.length === 0 ? (
-              <p className="text-xs text-[#525252] text-center py-4 font-sans">
+              <p className="text-xs text-muted-foreground text-center py-4 font-sans">
                 아직 작성된 글이 없습니다.
               </p>
             ) : (
               stats.categories.map((category, index) => (
                 <div
                   key={category.name}
-                  className={`flex items-center justify-between p-2.5 rounded-lg  transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                  className={`flex items-center justify-between p-2.5 rounded-md hover:bg-secondary transition-colors duration-200 cursor-pointer ${
                     isLoaded
                       ? "opacity-100 translate-x-0"
                       : "opacity-0 -translate-x-4"
@@ -319,25 +314,25 @@ export function BlogActivityDashboard({ stats }: BlogActivityDashboardProps) {
                 >
                   <div className="flex items-center gap-2.5">
                     <div
-                      className="w-3 h-3 rounded-full shadow-sm"
+                      className="w-3 h-3 rounded-sm"
                       style={{ backgroundColor: getCategoryColor(index) }}
                     />
-                    <span className="font-medium text-black text-sm font-sans">
+                    <span className="font-medium text-foreground text-sm font-sans">
                       {category.name}
                     </span>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                    <div className="w-20 h-1.5 bg-secondary rounded-sm overflow-hidden border border-border">
                       <div
-                        className="h-full transition-all duration-1000 ease-out"
+                        className="h-full transition-all duration-1000 ease-out bg-foreground"
                         style={{
                           width: isLoaded ? `${category.percentage}%` : "0%",
-                          backgroundColor: getCategoryColor(index),
+                          opacity: 1 - index * 0.2,
                           transitionDelay: `${index * 100}ms`,
                         }}
                       />
                     </div>
-                    <span className="text-xs font-bold text-[#525252] w-6 text-right font-sans">
+                    <span className="text-xs font-bold text-muted-foreground w-6 text-right font-sans">
                       {category.count}
                     </span>
                   </div>
