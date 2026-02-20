@@ -2,8 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import type { BlogPostMetadata } from "@/lib/posts";
@@ -16,8 +15,8 @@ export default function RecentPostsCard({ posts = [] }: RecentPostsCardProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {posts.length === 0 ? (
-           <div className="col-span-3 p-8 text-center font-mono text-muted-foreground bg-white/20 dark:bg-[#1C1C1E]/50 rounded-[1.5rem] border border-dashed border-white/20 backdrop-blur-2xl">
-              No posts yet... ✨
+           <div className="col-span-3 p-8 text-center text-muted-foreground bg-secondary rounded-lg border border-dashed border-border">
+              No posts yet...
            </div>
         ) : (
            posts.map((post) => (
@@ -26,25 +25,25 @@ export default function RecentPostsCard({ posts = [] }: RecentPostsCardProps) {
             href={`/blog/${post.slug}`}
             className="block group"
           >
-            <Card className="h-full overflow-hidden border border-white/30 dark:border-white/5 hover:border-white/50 bg-white/30 dark:bg-[#1C1C1E]/60 hover:shadow-glass transition-all duration-300 rounded-[1.5rem] group-hover:-translate-y-1 backdrop-blur-2xl">
+            <Card className="h-full overflow-hidden border border-border bg-card hover:bg-secondary/50 transition-all duration-200 rounded-lg group-hover:-translate-y-0.5">
               {/* Thumbnail */}
-              <div className="relative aspect-[16/10] bg-muted/30 overflow-hidden">
+              <div className="relative aspect-16/10 bg-secondary overflow-hidden">
                 <Image
                   src={post.thumbnail}
                   alt={post.title}
                   fill
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute top-3 left-3">
-                    <Badge className="bg-white/50 dark:bg-black/50 text-foreground/90 text-[10px] font-bold px-2.5 py-0.5 border border-white/20 dark:border-white/5 shadow-sm backdrop-blur-xl rounded-full">
+                    <Badge variant="secondary" className="text-[10px] font-medium px-2 py-0.5 bg-background border border-border rounded-md">
                         {post.category}
                     </Badge>
                 </div>
               </div>
 
               {/* Content */}
-              <div className="p-5 flex flex-col gap-3">
-                <span className="text-[10px] font-mono text-muted-foreground/80 flex items-center gap-1">
+              <div className="p-4 flex flex-col gap-2">
+                <span className="text-[10px] font-mono text-muted-foreground flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     {new Date(post.date).toLocaleDateString("en-US", {
                         month: "short",
@@ -52,12 +51,12 @@ export default function RecentPostsCard({ posts = [] }: RecentPostsCardProps) {
                     })}
                 </span>
                 
-                <h4 className="font-bold text-base leading-tight text-foreground/90 line-clamp-2 group-hover:text-primary transition-colors">
+                <h4 className="font-bold text-sm leading-tight text-foreground line-clamp-2 group-hover:text-muted-foreground transition-colors">
                   {post.title}
                 </h4>
                 
                 {post.introduction && (
-                  <p className="text-xs text-muted-foreground/80 line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
                     {post.introduction}
                   </p>
                 )}
