@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeSwitch } from "@/components/ui/theme-switch-button";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -39,7 +39,7 @@ export default function RootLayout({
               <a href="/" className="font-display font-bold text-sm text-foreground tracking-tight">
                 senny.log
               </a>
-              <ThemeToggle />
+              <ThemeSwitch />
             </header>
 
             {/* Main Content */}
