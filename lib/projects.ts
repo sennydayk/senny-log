@@ -7,8 +7,7 @@ export interface Project {
   github?: string;
   tags: string[];
   year: number;
-  emoji: string;
-  thumbnail?: string;
+  thumbnail: string;
   features: string[];
   techStack: {
     category: string;
@@ -30,7 +29,7 @@ GitHub OAuth를 통해 로그인하면, 사용자의 GitHub 프로필과 활동 
     url: "https://dev-fortune.vercel.app",
     tags: ["Next.js", "GitHub OAuth", "Claude AI", "Vercel"],
     year: 2026,
-    emoji: "🔮",
+    thumbnail: "/thumbnail-dev-fortune-2026.png",
     features: [
       "GitHub OAuth 소셜 로그인",
       "3개 질문으로 1분 완료",
@@ -60,7 +59,7 @@ GitHub OAuth를 통해 로그인하면, 사용자의 GitHub 프로필과 활동 
   },
   {
     slug: "senny-log",
-    title: "Senny Log",
+    title: "Senny.log",
     description: "Notion API 기반 개인 기술 블로그 및 포트폴리오 사이트",
     longDescription: `Notion을 CMS로 활용한 개인 기술 블로그입니다.
     
@@ -70,7 +69,7 @@ Notion API를 통해 글을 가져오고, Next.js의 ISR로 빌드 타임에 정
     github: "https://github.com/senny/senny-log",
     tags: ["Next.js", "Notion API", "Tailwind CSS", "TypeScript"],
     year: 2025,
-    emoji: "📝",
+    thumbnail: "/thumbnail-senny-log.png",
     features: [
       "Notion CMS 연동",
       "ISR 정적 페이지 생성",
@@ -95,8 +94,8 @@ Notion API를 통해 글을 가져오고, Next.js의 ISR로 빌드 타임에 정
     ],
   },
   {
-    slug: "component-kit",
-    title: "Component Kit",
+    slug: "memento",
+    title: "Memento",
     description: "재사용 가능한 React UI 컴포넌트 라이브러리 및 디자인 시스템",
     longDescription: `프로젝트 간 일관된 UI를 위해 만든 개인 컴포넌트 라이브러리입니다.
 
@@ -106,7 +105,7 @@ Radix UI 기반의 접근성 높은 컴포넌트와 Tailwind CSS로 스타일링
     github: "https://github.com/senny/component-kit",
     tags: ["React", "Storybook", "Radix UI", "Tailwind CSS"],
     year: 2025,
-    emoji: "🧩",
+    thumbnail: "/thumbnail-memento.png",
     features: [
       "Storybook 문서화",
       "Chromatic 비주얼 테스트",
@@ -131,8 +130,8 @@ Radix UI 기반의 접근성 높은 컴포넌트와 Tailwind CSS로 스타일링
     ],
   },
   {
-    slug: "focus-timer",
-    title: "Focus Timer",
+    slug: "stack-up",
+    title: "Stack Up",
     description: "뽀모도로 기법 기반의 집중 타이머 웹앱으로 통계와 알림 기능 제공",
     longDescription: `뽀모도로 기법을 활용한 집중 타이머 웹 애플리케이션입니다.
 
@@ -141,7 +140,7 @@ Radix UI 기반의 접근성 높은 컴포넌트와 Tailwind CSS로 스타일링
     url: "https://focus-timer-app.vercel.app",
     tags: ["React", "TypeScript", "Chart.js", "PWA"],
     year: 2024,
-    emoji: "⏱️",
+    thumbnail: "/thumbnail-stack-up.png",
     features: [
       "뽀모도로 타이머",
       "집중 통계 시각화",
@@ -162,42 +161,6 @@ Radix UI 기반의 접근성 높은 컴포넌트와 Tailwind CSS로 스타일링
       {
         category: "Deploy",
         items: ["Vercel", "PWA"],
-      },
-    ],
-  },
-  {
-    slug: "git-dash",
-    title: "Git Dash",
-    description: "GitHub 활동을 시각적으로 분석하는 개인 대시보드 서비스",
-    longDescription: `GitHub 활동 데이터를 한눈에 볼 수 있는 개인 대시보드입니다.
-
-커밋 히트맵, 언어별 통계, 리포지토리 트렌드 등을 시각화합니다.
-GitHub API를 활용하여 실시간 데이터를 제공합니다.`,
-    url: "https://git-dash.vercel.app",
-    github: "https://github.com/senny/git-dash",
-    tags: ["Next.js", "GitHub API", "Recharts", "TypeScript"],
-    year: 2024,
-    emoji: "📊",
-    features: [
-      "커밋 히트맵",
-      "언어별 사용 통계",
-      "리포지토리 트렌드",
-      "활동 요약 카드",
-      "GitHub OAuth 로그인",
-      "반응형 대시보드",
-    ],
-    techStack: [
-      {
-        category: "Frontend",
-        items: ["Next.js 14", "TypeScript", "Tailwind CSS"],
-      },
-      {
-        category: "Visualization",
-        items: ["Recharts", "D3.js"],
-      },
-      {
-        category: "API",
-        items: ["GitHub REST API", "GitHub GraphQL API"],
       },
     ],
   },

@@ -76,7 +76,7 @@ function TabNavigation({
 /* ── Profile Card ── */
 function ProfileCard() {
   return (
-    <div className="w-full lg:w-[260px] shrink-0">
+    <div className="w-full sm:w-[260px] shrink-0">
       <div className="h-full bg-card border border-border rounded-lg overflow-hidden">
         <div className="relative h-44 bg-secondary overflow-hidden">
           <div className="absolute inset-0 flex items-center justify-center">
@@ -141,8 +141,8 @@ function ContentCard({
   children: ReactNode;
 }) {
   return (
-    <div className="flex-1 bg-secondary border border-border rounded-lg relative overflow-hidden transition-colors duration-300">
-      <div className="relative z-10 p-8 md:p-10 flex flex-col justify-center h-full">
+    <div className="flex-1 min-w-0 bg-secondary border border-border rounded-lg relative overflow-hidden transition-colors duration-300">
+      <div className="relative z-10 p-8 md:p-8 flex flex-col justify-center h-full">
         <div className="max-w-lg">
           <div className="inline-flex items-center px-3 py-1.5 bg-background border border-border rounded-md mb-4">
             <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -168,10 +168,11 @@ const skills = [
 
 export function IntroTabContent() {
   return (
-    <section className="flex flex-col lg:flex-row gap-6 relative z-10">
+    <section className="flex flex-col sm:flex-row gap-6 relative z-10">
       <ProfileCard />
       <ContentCard label="Intro">
-        <ul className="list-disc list-inside space-y-1.5 text-sm md:text-base text-muted-foreground leading-relaxed">
+        <ul className="list-disc list-inside space-y-1.5 text-xs md:text-sm text-muted-foreground leading-relaxed">
+        <li>작은 디테일이 만드는 완성도를 추구합니다.</li>
           <li>구조와 사용성을 기반으로 문제를 해결하는 UI를 만듭니다.</li>
           <li>읽기 쉬운 코드와 예측 가능한 동작을 통해, 안정적으로 확장되는 인터페이스를 지향합니다.</li>
         </ul>
@@ -188,7 +189,7 @@ export function IntroTabContent() {
               </span>
             ))}
           </div>
-          <p className="text-xs text-muted-foreground mt-3">2+ years · Frontend Developer</p>
+          <p className="text-xs text-muted-foreground mt-3">1+ years · Frontend Developer</p>
         </div>
       </ContentCard>
     </section>
@@ -259,7 +260,7 @@ function CareerEntryRow({ entry }: { entry: CareerEntry }) {
             </span>
           )}
         </div>
-        <h3 className="text-base md:text-lg font-bold text-foreground leading-tight mb-0.5">
+        <h3 className="text-sm md:text-base font-bold text-foreground leading-tight mb-0.5">
           <FlipText className="text-foreground" hovered={hovered}>
             {entry.title}
           </FlipText>
@@ -313,7 +314,7 @@ export function CareerTabContent() {
 /* ── Contact Tab Content ── */
 export function ContactTabContent() {
   return (
-    <section className="relative z-10">
+    <section className="relative z-10 cursor-pointer">
       <div className="inline-flex items-center px-3 py-1.5 bg-background border border-border rounded-md mb-4">
         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
           Reach Out

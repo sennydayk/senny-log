@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
@@ -11,9 +12,9 @@ export default function ProjectsPage() {
 
   return (
     <div className="min-h-screen bg-transparent text-foreground">
-      <div className="max-w-5xl mx-auto px-4 md:px-8 py-8 md:py-12">
+      <div className="max-w-5xl mx-auto px-4 md:px-8 py-8 md:py-6">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors mb-6"
@@ -23,10 +24,10 @@ export default function ProjectsPage() {
           </Link>
 
           <div>
-            <h1 className="text-3xl md:text-4xl font-black text-foreground tracking-tight">
+            <h1 className="text-3xl md:text-2xl font-black text-foreground tracking-tight">
               Projects
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               사이드 프로젝트 & 토이 프로젝트 모음
             </p>
           </div>
@@ -48,11 +49,15 @@ export default function ProjectsPage() {
               className="block group h-full"
             >
               <Card className="h-full overflow-hidden border border-border bg-card hover:bg-secondary/50 transition-all duration-200 rounded-lg group-hover:-translate-y-0.5 flex flex-col">
-                {/* Emoji Thumbnail - 상단 직사각형 영역 */}
-                <div className="w-full aspect-16/10 min-h-[140px] relative bg-secondary flex items-center justify-center border-b border-border shrink-0">
-                  <span className="text-5xl sm:text-6xl group-hover:scale-110 transition-transform duration-300">
-                    {project.emoji}
-                  </span>
+                {/* Thumbnail - 상단 직사각형 영역 */}
+                <div className="w-full aspect-16/10 min-h-[140px] relative bg-secondary flex items-center justify-center border-b border-border shrink-0 overflow-hidden">
+                  <Image
+                    src={project.thumbnail}
+                    alt={project.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                  />
                   <div className="absolute top-3 left-3">
                     <Badge variant="secondary" className="text-[10px] font-medium px-2 py-0.5">
                       {project.year}

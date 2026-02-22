@@ -282,7 +282,7 @@ export const RadialScrollGallery = forwardRef<
                       block cursor-pointer outline-none text-left
                       focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
                       rounded-xl transition-all duration-500 ease-out will-change-transform
-                      ${isHovered ? 'scale-125 -translate-y-8' : 'scale-100'}
+                      ${isHovered ? 'scale-125 -translate-y-8' : 'scale-[1.2]'}
                       ${
                         isAnyHovered && !isHovered
                           ? 'blur-[2px] opacity-40 grayscale'

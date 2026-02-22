@@ -1,27 +1,42 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from "react";
-import { Github, Globe, Mail } from "lucide-react";
+import { Github, Globe, Mail, Instagram, Linkedin, BookOpen, Copy, Check } from "lucide-react";
 
-interface ContactItem {
+type ContactIconType = "mail" | "github" | "globe" | "instagram" | "velog" | "linkedin";
+
+interface ContactItemBase {
   label: string;
-  href: string;
-  icon: "mail" | "github" | "globe";
+  icon: ContactIconType;
   radius: number;
   tint: string;
   tintHover: string;
 }
 
+interface ContactItemEmail extends ContactItemBase {
+  type: "email";
+  emailAddress: string;
+}
+
+interface ContactItemLink extends ContactItemBase {
+  type: "link";
+  href: string;
+}
+
+type ContactItem = ContactItemEmail | ContactItemLink;
+
 const CONTACT_ITEMS: ContactItem[] = [
   {
+    type: "email",
     label: "Email",
-    href: "mailto:senny@email.com",
+    emailAddress: "seyeon981217@gmail.com",
     icon: "mail",
     radius: 52,
     tint: "rgba(163,163,163,0.12)",
     tintHover: "rgba(115,115,115,0.25)",
   },
   {
+    type: "link",
     label: "GitHub",
     href: "https://github.com/senny",
     icon: "github",
@@ -30,6 +45,7 @@ const CONTACT_ITEMS: ContactItem[] = [
     tintHover: "rgba(115,115,115,0.25)",
   },
   {
+    type: "link",
     label: "Website",
     href: "https://senny.dev",
     icon: "globe",
@@ -37,32 +53,80 @@ const CONTACT_ITEMS: ContactItem[] = [
     tint: "rgba(163,163,163,0.12)",
     tintHover: "rgba(115,115,115,0.25)",
   },
+  {
+    type: "link",
+    label: "Instagram",
+    href: "https://instagram.com/senny",
+    icon: "instagram",
+    radius: 50,
+    tint: "rgba(163,163,163,0.12)",
+    tintHover: "rgba(115,115,115,0.25)",
+  },
+  {
+    type: "link",
+    label: "Velog",
+    href: "https://velog.io/@senny",
+    icon: "velog",
+    radius: 46,
+    tint: "rgba(163,163,163,0.12)",
+    tintHover: "rgba(115,115,115,0.25)",
+  },
+  {
+    type: "link",
+    label: "LinkedIn",
+    href: "https://linkedin.com/in/senny",
+    icon: "linkedin",
+    radius: 50,
+    tint: "rgba(163,163,163,0.12)",
+    tintHover: "rgba(115,115,115,0.25)",
+  },
 ];
 
-const ICON_MAP = {
+const ICON_MAP: Record<ContactIconType, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   mail: Mail,
   github: Github,
   globe: Globe,
-} as const;
+  instagram: Instagram,
+  velog: BookOpen,
+  linkedin: Linkedin,
+};
 
 interface BallPosition {
   x: number;
   y: number;
 }
 
+function getEmailLines(emailAddress: string): [string, string] {
+  const atIndex = emailAddress.indexOf("@");
+  if (atIndex < 0) return [emailAddress, ""];
+  return [emailAddress.slice(0, atIndex + 1), emailAddress.slice(atIndex + 1)];
+}
+
 function BallOverlay({
   item,
   x,
   y,
+  prevX,
+  prevY,
   isHovered,
+  copied,
+  showTrail,
 }: {
   item: ContactItem;
   x: number;
   y: number;
+  prevX: number;
+  prevY: number;
   isHovered: boolean;
+  copied?: boolean;
+  showTrail: boolean;
 }) {
   const Icon = ICON_MAP[item.icon];
   const r = item.radius;
+  const isEmail = item.type === "email";
+  const showCopyIcon = isEmail && (isHovered || copied);
+  const displayLabel = item.type === "email" ? item.emailAddress : item.label;
+  const emailLines = item.type === "email" ? getEmailLines(item.emailAddress) : null;
 
   return (
     <div
@@ -74,8 +138,37 @@ function BallOverlay({
         height: r * 2,
       }}
     >
+      {/* 트레일: 공이 움직일 때 은은한 빛/부스러기 */}
+      {showTrail && (
+        <>
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              left: r - 6,
+              top: r - 6,
+              width: 12,
+              height: 12,
+              backgroundColor: "rgba(128, 128, 128, 0.2)",
+              filter: "blur(4px)",
+              transform: `translate(${(prevX - x) * 0.5}px, ${(prevY - y) * 0.5}px)`,
+            }}
+          />
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              left: r - 8,
+              top: r - 8,
+              width: 16,
+              height: 16,
+              backgroundColor: "rgba(128, 128, 128, 0.12)",
+              filter: "blur(6px)",
+              transform: `translate(${(prevX - x) * 0.8}px, ${(prevY - y) * 0.8}px)`,
+            }}
+          />
+        </>
+      )}
       <div
-        className="w-full h-full rounded-full flex items-center justify-center relative transition-all duration-300"
+        className="w-full h-full rounded-full flex items-center justify-center relative transition-all duration-300 cursor-pointer"
         style={{
           background: isHovered ? item.tintHover : item.tint,
           border: `1.5px solid ${isHovered ? "rgba(115,115,115,0.3)" : "rgba(200,200,200,0.2)"}`,
@@ -92,28 +185,66 @@ function BallOverlay({
             background: "radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12), transparent 60%)",
           }}
         />
-        <div className="flex flex-col items-center gap-1.5 relative z-10">
-          <Icon
-            className="transition-all duration-300"
-            style={{
-              width: isHovered ? 22 : 18,
-              height: isHovered ? 22 : 18,
-              color: isHovered
-                ? "var(--color-foreground)"
-                : "var(--color-muted-foreground)",
-            }}
-          />
-          <span
-            className="text-[10px] font-medium tracking-wide transition-colors duration-300"
-            style={{
-              color: isHovered
-                ? "var(--color-foreground)"
-                : "var(--color-muted-foreground)",
-            }}
-          >
-            {item.label}
-          </span>
-        </div>
+        {showCopyIcon ? (
+          <div className="flex items-center justify-center relative z-10">
+            {copied ? (
+              <Check
+                className="transition-all duration-300"
+                style={{
+                  width: 22,
+                  height: 22,
+                  color: "var(--color-foreground)",
+                }}
+              />
+            ) : (
+              <Copy
+                className="transition-all duration-300"
+                style={{
+                  width: 22,
+                  height: 22,
+                  color: "var(--color-foreground)",
+                }}
+              />
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-1 relative z-10 px-0.5">
+            <Icon
+              className="transition-all duration-300 shrink-0"
+              style={{
+                width: isHovered ? 22 : 18,
+                height: isHovered ? 22 : 18,
+                color: isHovered
+                  ? "var(--color-foreground)"
+                  : "var(--color-muted-foreground)",
+              }}
+            />
+            {emailLines ? (
+              <span
+                className="text-[10px] font-medium tracking-wide transition-colors duration-300 text-center leading-tight"
+                style={{
+                  color: isHovered
+                    ? "var(--color-foreground)"
+                    : "var(--color-muted-foreground)",
+                }}
+              >
+                <span className="block">{emailLines[0]}</span>
+                <span className="block">{emailLines[1]}</span>
+              </span>
+            ) : (
+              <span
+                className="text-[10px] font-medium tracking-wide transition-colors duration-300 whitespace-nowrap overflow-hidden text-ellipsis text-center min-w-0 max-w-full"
+                style={{
+                  color: isHovered
+                    ? "var(--color-foreground)"
+                    : "var(--color-muted-foreground)",
+                }}
+              >
+                {displayLabel}
+              </span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -131,13 +262,31 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 function getDefaultPositions(width: number, height: number): BallPosition[] {
-  return CONTACT_ITEMS.map((item, i) => {
-    const r = item.radius;
-    const t = CONTACT_ITEMS.length + 1;
-    const x = (width * (i + 1)) / t;
-    const y = height / 2 + (i - 1) * 28;
-    return { x: clamp(x, r, width - r), y: clamp(y, r, height - r) };
-  });
+  const positions: BallPosition[] = [];
+  const margin = 24;
+  for (let i = 0; i < CONTACT_ITEMS.length; i++) {
+    const r = CONTACT_ITEMS[i].radius;
+    const minX = r + margin;
+    const maxX = width - r - margin;
+    const minY = r + margin;
+    const maxY = height - r - margin;
+    let x: number;
+    let y: number;
+    let attempts = 0;
+    do {
+      x = minX + Math.random() * (maxX - minX);
+      y = minY + Math.random() * (maxY - minY);
+      const tooClose = positions.some((p, j) => {
+        const otherR = CONTACT_ITEMS[j].radius;
+        const dist = Math.hypot(p.x - x, p.y - y);
+        return dist < r + otherR + 16;
+      });
+      if (!tooClose || attempts > 30) break;
+      attempts++;
+    } while (true);
+    positions.push({ x: clamp(x, r, width - r), y: clamp(y, r, height - r) });
+  }
+  return positions;
 }
 
 function findClosestBallIndex(
@@ -177,7 +326,12 @@ export default function ContactBalls() {
   const [positions, setPositions] = useState<BallPosition[]>(
     CONTACT_ITEMS.map(() => ({ x: 0, y: 0 }))
   );
+  const prevPositionsRef = useRef<BallPosition[]>(CONTACT_ITEMS.map(() => ({ x: 0, y: 0 })));
+  const [prevPositions, setPrevPositions] = useState<BallPosition[]>(
+    CONTACT_ITEMS.map(() => ({ x: 0, y: 0 }))
+  );
   const [hoveredIndex, setHoveredIndex] = useState(-1);
+  const [copiedEmailIndex, setCopiedEmailIndex] = useState(-1);
 
   const getContainerPoint = useCallback(
     (clientX: number, clientY: number): BallPosition => {
@@ -233,10 +387,12 @@ export default function ContactBalls() {
 
       if (dist < 12 && elapsed < 220) {
         const item = CONTACT_ITEMS[down.ballIndex];
-        if (item.href.startsWith("mailto:")) {
-          window.location.href = item.href;
-        } else {
+        if (item.type === "link") {
           window.open(item.href, "_blank", "noopener,noreferrer");
+        } else if (item.type === "email") {
+          navigator.clipboard.writeText(item.emailAddress);
+          setCopiedEmailIndex(down.ballIndex);
+          window.setTimeout(() => setCopiedEmailIndex(-1), 2000);
         }
       }
     },
@@ -343,7 +499,9 @@ export default function ContactBalls() {
         }
       }
 
+      prevPositionsRef.current = [...pos];
       positionsRef.current = next;
+      setPrevPositions([...pos]);
       setPositions([...next]);
       rafRef.current = requestAnimationFrame(tick);
     };
@@ -356,25 +514,37 @@ export default function ContactBalls() {
     };
   }, []);
 
+  const TRAIL_DISTANCE_THRESHOLD = 0.8;
+
   return (
     <div
       ref={containerRef}
       className="relative w-full h-[320px] md:h-[360px] overflow-hidden rounded-lg bg-secondary border border-border select-none touch-none"
-      style={{ cursor: hoveredIndex >= 0 ? "pointer" : "default" }}
+      style={{ cursor: "pointer" }}
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerLeave}
     >
-      {CONTACT_ITEMS.map((item, i) => (
-        <BallOverlay
-          key={item.label}
-          item={item}
-          x={positions[i].x}
-          y={positions[i].y}
-          isHovered={hoveredIndex === i}
-        />
-      ))}
+      {CONTACT_ITEMS.map((item, i) => {
+        const curr = positions[i];
+        const prev = prevPositions[i];
+        const dist = Math.hypot(curr.x - prev.x, curr.y - prev.y);
+        const showTrail = dist > TRAIL_DISTANCE_THRESHOLD;
+        return (
+          <BallOverlay
+            key={item.label}
+            item={item}
+            x={curr.x}
+            y={curr.y}
+            prevX={prev.x}
+            prevY={prev.y}
+            isHovered={hoveredIndex === i}
+            copied={item.type === "email" ? copiedEmailIndex === i : undefined}
+            showTrail={showTrail}
+          />
+        );
+      })}
 
       <div className="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
         <p className="text-[11px] text-muted-foreground/40 font-medium tracking-wide">

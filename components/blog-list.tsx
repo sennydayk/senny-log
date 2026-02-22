@@ -15,10 +15,15 @@ type BlogListProps = {
 
 export function BlogList({ posts, categories }: BlogListProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredPosts = selectedCategory
-    ? posts.filter((post) => post.category === selectedCategory)
-    : posts;
+  const filteredPosts = posts
+    .filter((post) => !selectedCategory || post.category === selectedCategory)
+    .filter((post) => {
+      const query = searchQuery.trim().toLowerCase();
+      if (!query) return true;
+      return post.title.toLowerCase().includes(query);
+    });
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -34,42 +39,43 @@ export function BlogList({ posts, categories }: BlogListProps) {
       {/* Sidebar */}
       <aside className="w-full md:w-60 border-b md:border-b-0 md:border-r border-border bg-background flex flex-col h-auto md:h-screen sticky top-0 z-40 shrink-0">
         {/* Header */}
-        <div className="p-5 border-b border-border">
-            <Link href="/" className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground mb-4 transition-colors">
+        <div className="p-5">
+            <Link href="/" className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
                 <ArrowLeft className="w-3 h-3" /> Back to Home
             </Link>
-            
-            <h1 className="font-bold text-lg tracking-tight text-foreground">Senny.log</h1>
         </div>
 
         {/* Navigation */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 relative z-10">
+        <div className="flex-1 overflow-y-auto px-4 mb-4 space-y-4 relative z-10">
             
             {/* Search */}
             <div className="bg-secondary p-2.5 flex items-center gap-2 rounded-md border border-border">
-                <Search className="w-3.5 h-3.5 text-muted-foreground ml-1" />
-                <input 
-                    type="text" 
-                    placeholder="Search..." 
+                <Search className="w-3.5 h-3.5 text-muted-foreground ml-1 shrink-0" />
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full bg-transparent border-none outline-none text-xs font-medium placeholder:text-muted-foreground"
                 />
             </div>
 
             <div>
-                <h2 className="text-[10px] font-bold text-muted-foreground mb-2 uppercase tracking-wider flex items-center gap-1.5 px-2">
+                <h2 className="hidden md:flex text-[10px] font-bold text-muted-foreground mb-2 uppercase tracking-wider items-center gap-1.5 px-2 py-1">
                     <FolderOpen className="w-3.5 h-3.5" /> Categories
                 </h2>
-                <div className="space-y-0.5">
+                <div className="flex flex-wrap gap-2 md:flex-col md:flex-nowrap md:gap-0 md:space-y-0.5">
                     <button
                         type="button"
                         onClick={() => setSelectedCategory(null)}
-                        className={`w-full text-left px-3 py-2 rounded-md transition-colors text-xs font-medium cursor-pointer flex items-center gap-2 ${
+                        className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium cursor-pointer transition-colors
+                            md:w-full md:justify-start md:px-3 md:py-2 md:gap-2 ${
                             selectedCategory === null
                             ? "bg-foreground text-background"
                             : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                         }`}
                     >
-                        <div className={`w-1.5 h-1.5 rounded-full ${selectedCategory === null ? 'bg-background' : 'bg-muted-foreground/30'}`}></div>
+                        <div className={`hidden md:block w-1.5 h-1.5 rounded-full shrink-0 ${selectedCategory === null ? 'bg-background' : 'bg-muted-foreground/30'}`}></div>
                         All Posts
                     </button>
                     
@@ -78,29 +84,26 @@ export function BlogList({ posts, categories }: BlogListProps) {
                             key={category}
                             type="button"
                             onClick={() => setSelectedCategory(category)}
-                            className={`w-full text-left px-3 py-2 rounded-md transition-colors text-xs font-medium cursor-pointer flex items-center gap-2 ${
+                            className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium cursor-pointer transition-colors
+                                md:w-full md:justify-start md:px-3 md:py-2 md:gap-2 ${
                                 selectedCategory === category
                                 ? "bg-foreground text-background"
                                 : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                             }`}
                         >
-                             <ChevronRight className={`w-3 h-3 transition-transform ${selectedCategory === category ? 'rotate-90' : 'opacity-30'}`} />
+                             <ChevronRight className={`hidden md:block w-3 h-3 shrink-0 transition-transform ${selectedCategory === category ? 'rotate-90' : 'opacity-30'}`} />
                             {category}
                         </button>
                     ))}
                 </div>
             </div>
         </div>
-        
-        {/* Footer Status */}
-        <div className="p-3 border-t border-border text-[10px] font-medium text-muted-foreground flex justify-between items-center">
-            <span>&copy; Senny</span>
-        </div>
+    
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 md:h-screen overflow-y-auto relative z-0 bg-transparent pb-20 md:pb-0 scrollbar-hide">
-        <div className="p-4 md:p-8 max-w-4xl mx-auto min-h-full flex flex-col">
+      <main className="flex-1 md:h-screen overflow-y-auto relative z-0 bg-transparent md:pb-0 scrollbar-hide">
+        <div className="px-4 md:px-8 py-4 md:py-4 max-w-4xl mx-auto min-h-full flex flex-col">
             
             {/* Header */}
             <div className="mb-6 flex items-end justify-between gap-4 border-b border-border pb-4 sticky top-0 bg-background z-10 pt-4 px-4 -mx-4">
@@ -185,7 +188,7 @@ export function BlogList({ posts, categories }: BlogListProps) {
               ) : (
                   <div className="border border-dashed border-border p-10 text-center bg-secondary rounded-lg">
                       <FolderIcon className="w-10 h-10 mx-auto mb-2 text-muted-foreground/30" />
-                      <p className="font-medium text-sm text-muted-foreground">Nothing found here...</p>
+                      <p className="font-medium text-sm text-muted-foreground">게시글이 없습니다.</p>
                   </div>
               )}
             </div>
