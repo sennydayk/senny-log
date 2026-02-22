@@ -52,7 +52,7 @@ export default async function ProjectDetailPage({
 
   return (
     <div className="min-h-screen bg-transparent text-foreground">
-      <div className="max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-6">
+      <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-6">
         {/* Navigation */}
         <Link
           href="/projects"
