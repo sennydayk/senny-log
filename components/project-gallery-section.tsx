@@ -14,15 +14,15 @@ export default function ProjectGallerySection({ projects }: ProjectGallerySectio
 
   return (
     <section className="relative z-10">
-      <div className="text-center space-y-3 mb-4">
-        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+      <div className="text-center space-y-2 mb-2">
+        {/* <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
           Side Projects
         </p>
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
           Projects
-        </h2>
+        </h2> */}
         <p className="text-muted-foreground text-sm max-w-[340px] mx-auto">
-          스크롤하여 프로젝트를 둘러보세요
+        Browse the projects below.
         </p>
       </div>
 

@@ -200,17 +200,17 @@ export const RadialScrollGallery = forwardRef<
 
     const scaleFactor = 1.25;
     const calculatedBuffer = childSize
-      ? childSize.h * scaleFactor - childSize.h + 60
-      : 150;
+      ? childSize.h * scaleFactor - childSize.h + 40
+      : 100;
 
     const visibleAreaHeight = childSize
       ? circleDiameter * visibleDecimal + childSize.h / 2 + calculatedBuffer
-      : circleDiameter * visibleDecimal + 200;
+      : circleDiameter * visibleDecimal + 120;
 
     return (
       <div
         ref={mergedRef}
-        className={`min-h-screen w-full relative flex items-center justify-center overflow-hidden ${className}`}
+        className={`w-full relative flex flex-col justify-start items-center overflow-hidden ${className}`}
         {...rest}
       >
         <div

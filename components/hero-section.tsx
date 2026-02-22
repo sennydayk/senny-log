@@ -2,15 +2,16 @@
 
 import { ReactNode, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { 
   Github, 
   Globe, 
-  Mail,
   Code2,
   Figma,
   GitBranch,
-  ExternalLink,
 } from "lucide-react";
+import ContactBalls from "./contact-balls";
+import { FlipText } from "./ui/flip-links";
 
 type TabId = "intro" | "projects" | "career" | "contact";
 
@@ -60,6 +61,12 @@ function TabNavigation({
               {tab.label}
             </button>
           ))}
+          <Link
+            href="/blog"
+            className="ml-auto px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+          >
+            View Blog
+          </Link>
         </div>
       </nav>
     </header>
@@ -199,27 +206,85 @@ interface CareerEntry {
 
 const careerHistory: CareerEntry[] = [
   {
-    period: "2024.03 — Present",
+    period: "2026.02 — Present",
     title: "Frontend Developer",
-    company: "Company A",
+    company: "Gluwa",
     description: "React, Next.js 기반 웹 서비스 개발 및 유지보수",
     current: true,
   },
   {
-    period: "2023.06 — 2024.02",
+    period: "2025.07 — 2026.01",
     title: "Frontend Developer",
-    company: "Company B",
-    description: "사내 어드민 대시보드 및 고객 대상 웹 애플리케이션 개발",
+    company: "Rusheight",
+    description: "사내 어드민 대시보드 및 게임 웹사이트 개발",
     current: false,
   },
   {
-    period: "2022.09 — 2023.05",
-    title: "Intern · Frontend",
-    company: "Company C",
-    description: "UI 컴포넌트 개발 및 디자인 시스템 구축 참여",
+    period: "2025.03 — 2025.05",
+    title: "Intern · Marketing Data Analyst",
+    company: "GoldenPlanet",
+    description: "마케팅 데이터 기획 및 분석 참여",
     current: false,
   },
 ];
+
+function CareerEntryRow({ entry }: { entry: CareerEntry }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      className="relative grid grid-cols-[auto_1fr] gap-4 pb-8 last:pb-0 group"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="relative flex flex-col items-center pt-1">
+        <div
+          className={`
+            w-[11px] h-[11px] rounded-full shrink-0 z-10 ring-3 ring-secondary transition-all
+            ${entry.current
+              ? "bg-foreground shadow-[0_0_10px_rgba(var(--foreground-rgb,0,0,0),0.3)]"
+              : "bg-muted-foreground/20 group-hover:bg-muted-foreground/40"
+            }
+          `}
+        />
+      </div>
+
+      <div className="flex-1 min-w-0 pb-1">
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="text-[11px] font-mono text-muted-foreground tracking-wide">
+            {entry.period}
+          </span>
+          {entry.current && (
+            <span className="text-[9px] font-bold text-green-600 dark:text-green-400 bg-green-500/10 border border-green-500/20 px-1.5 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
+              Current
+            </span>
+          )}
+        </div>
+        <h3 className="text-base md:text-lg font-bold text-foreground leading-tight mb-0.5">
+          <FlipText className="text-foreground" hovered={hovered}>
+            {entry.title}
+          </FlipText>
+        </h3>
+        <p className="text-xs font-medium text-muted-foreground mb-1.5">
+          <FlipText
+            className="text-muted-foreground text-xs font-medium"
+            hovered={hovered}
+          >
+            {entry.company}
+          </FlipText>
+        </p>
+        <p className="text-xs text-muted-foreground/80 leading-relaxed max-w-xl">
+          <FlipText
+            className="text-muted-foreground/80 text-xs leading-relaxed"
+            hovered={hovered}
+            wrap
+          >
+            {entry.description}
+          </FlipText>
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export function CareerTabContent() {
   return (
@@ -236,44 +301,7 @@ export function CareerTabContent() {
             <div className="absolute left-[5px] top-2 bottom-2 w-px bg-gradient-to-b from-foreground via-border to-transparent" />
 
             {careerHistory.map((entry) => (
-              <div
-                key={entry.period}
-                className="relative grid grid-cols-[auto_1fr] gap-4 pb-8 last:pb-0 group"
-              >
-                <div className="relative flex flex-col items-center pt-1">
-                  <div
-                    className={`
-                      w-[11px] h-[11px] rounded-full shrink-0 z-10 ring-3 ring-secondary transition-all
-                      ${entry.current
-                        ? "bg-foreground shadow-[0_0_10px_rgba(var(--foreground-rgb,0,0,0),0.3)]"
-                        : "bg-muted-foreground/20 group-hover:bg-muted-foreground/40"
-                      }
-                    `}
-                  />
-                </div>
-
-                <div className="flex-1 min-w-0 pb-1">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="text-[11px] font-mono text-muted-foreground tracking-wide">
-                      {entry.period}
-                    </span>
-                    {entry.current && (
-                      <span className="text-[9px] font-bold text-green-600 dark:text-green-400 bg-green-500/10 border border-green-500/20 px-1.5 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
-                        Current
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="text-base md:text-lg font-bold text-foreground leading-tight mb-0.5">
-                    {entry.title}
-                  </h3>
-                  <p className="text-xs font-medium text-muted-foreground mb-1.5">
-                    {entry.company}
-                  </p>
-                  <p className="text-xs text-muted-foreground/80 leading-relaxed max-w-xl">
-                    {entry.description}
-                  </p>
-                </div>
-              </div>
+              <CareerEntryRow key={entry.period} entry={entry} />
             ))}
           </div>
         </div>
@@ -283,70 +311,15 @@ export function CareerTabContent() {
 }
 
 /* ── Contact Tab Content ── */
-const contacts = [
-  { label: "senny@email.com", icon: <Mail className="w-3.5 h-3.5" />, href: "mailto:senny@email.com" },
-  { label: "github.com/senny", icon: <Github className="w-3.5 h-3.5" />, href: "https://github.com/senny" },
-  { label: "senny.dev", icon: <Globe className="w-3.5 h-3.5" />, href: "https://senny.dev" },
-];
-
-function FlipText({ text }: { text: string }) {
-  return (
-    <span className="relative inline-flex overflow-hidden" style={{ lineHeight: 1.2 }}>
-      <span className="flex">
-        {text.split("").map((char, i) => (
-          <span
-            key={i}
-            className="inline-block transition-transform duration-300 ease-in-out group-hover/item:-translate-y-full"
-            style={{ transitionDelay: `${i * 20}ms` }}
-          >
-            {char === " " ? "\u00A0" : char}
-          </span>
-        ))}
-      </span>
-      <span className="absolute inset-0 flex">
-        {text.split("").map((char, i) => (
-          <span
-            key={i}
-            className="inline-block translate-y-full transition-transform duration-300 ease-in-out group-hover/item:translate-y-0"
-            style={{ transitionDelay: `${i * 20}ms` }}
-          >
-            {char === " " ? "\u00A0" : char}
-          </span>
-        ))}
-      </span>
-    </span>
-  );
-}
-
 export function ContactTabContent() {
   return (
-    <section className="flex flex-col lg:flex-row gap-6 relative z-10">
-      <ContentCard label="Contact">
-        <ul className="list-disc list-inside space-y-1.5 text-base md:text-lg text-muted-foreground leading-relaxed">
-          <li>Have a project in mind or just want to chat? Feel free to reach out. I&apos;m always open to new opportunities and collaborations.</li>
-        </ul>
-        <div className="mt-6 mb-2">
-          <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-2">Reach out</p>
-          <div className="space-y-0">
-            {contacts.map((contact) => (
-              <a
-                key={contact.label}
-                href={contact.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 py-2 border-b border-border last:border-b-0 group/item cursor-pointer"
-              >
-                <span className="text-muted-foreground">{contact.icon}</span>
-                <span className="text-sm text-foreground">
-                  <FlipText text={contact.label} />
-                </span>
-                <ExternalLink className="w-3 h-3 text-muted-foreground/40 ml-auto shrink-0 group-hover/item:text-muted-foreground transition-colors" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </ContentCard>
-      <ProfileCard />
+    <section className="relative z-10">
+      <div className="inline-flex items-center px-3 py-1.5 bg-background border border-border rounded-md mb-4">
+        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+          Reach Out
+        </span>
+      </div>
+      <ContactBalls />
     </section>
   );
 }
