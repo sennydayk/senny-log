@@ -1,11 +1,27 @@
 import Link from "next/link";
+import path from "path";
+import fs from "fs";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import ImageGallery from "@/components/ui/image-gallery";
 import { getProjectBySlug, getAllProjects } from "@/lib/projects";
+
+function getProjectImagePaths(slug: string): string[] {
+  const baseDir = path.join(process.cwd(), "public", "project-img");
+  const paths: string[] = [];
+  for (let i = 1; i <= 5; i++) {
+    const filename = `${slug}-img-${i}.png`;
+    const fullPath = path.join(baseDir, filename);
+    if (fs.existsSync(fullPath)) {
+      paths.push(`/project-img/${filename}`);
+    }
+  }
+  return paths;
+}
 import {
   ArrowLeft,
-  ExternalLink,
+  Globe,
   Github,
   CheckCircle2,
   Layers,
@@ -32,9 +48,11 @@ export default async function ProjectDetailPage({
     notFound();
   }
 
+  const projectImages = getProjectImagePaths(slug);
+
   return (
     <div className="min-h-screen bg-transparent text-foreground">
-      <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-12">
+      <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-6">
         {/* Navigation */}
         <Link
           href="/projects"
@@ -46,44 +64,54 @@ export default async function ProjectDetailPage({
 
         {/* Header Card */}
         <Card className="overflow-hidden border border-border bg-card rounded-lg mb-8">
-          {/* Hero Section */}
-          <div className="relative bg-secondary p-8 md:p-12 flex flex-col items-center justify-center text-center border-b border-border">
-            <span className="text-8xl md:text-9xl mb-6">
-              {project.emoji}
-            </span>
-            <Badge variant="secondary" className="text-xs font-medium px-3 py-1 mb-4">
-              {project.year}
-            </Badge>
-            <h1 className="text-3xl md:text-5xl font-black text-foreground tracking-tight mb-3">
-              {project.title}
-            </h1>
-            <p className="text-base md:text-lg text-muted-foreground max-w-xl">
-              {project.description}
-            </p>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="p-6 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-medium rounded-md hover:opacity-80 transition-opacity"
-            >
-              <ExternalLink className="w-4 h-4" />
-              사이트 방문하기
-            </a>
-            {project.github && (
+          {/* 텍스트 영역 + 버튼 같은 줄 오른쪽 */}
+          <div className="px-4 md:px-6 pt-5 pb-4 flex flex-row items-start gap-4">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                {/* <Badge variant="outline" className="text-xs font-medium px-2 py-0.5 rounded-md">
+                  {project.year}
+                </Badge> */}
+              </div>
+              <div className="flex flex-nowrap items-baseline gap-2 text-sm">
+                <h1 className="text-xl md:text-xl font-bold text-foreground tracking-tight shrink-0">
+                  {project.title}
+                </h1>
+                <span className="text-muted-foreground truncate min-w-0 ml-2">
+                  {project.description}
+                </span>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
               <a
-                href={project.github}
+                href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-foreground font-medium rounded-md hover:bg-secondary/80 transition-colors border border-border"
+                className="inline-flex size-10 items-center justify-center rounded-md bg-foreground text-background hover:opacity-80 transition-opacity"
+                title="사이트 방문하기"
               >
-                <Github className="w-4 h-4" />
-                GitHub
+                <Globe className="size-5" />
               </a>
-            )}
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-secondary text-foreground hover:bg-secondary/80 transition-colors"
+                  title="GitHub"
+                >
+                  <Github className="size-5" />
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Image Gallery */}
+          <div className="border-t border-border">
+            <ImageGallery
+              images={projectImages.length > 0 ? projectImages : undefined}
+              className="py-6"
+              galleryHeight="h-[280px]"
+            />
           </div>
         </Card>
 
@@ -91,12 +119,12 @@ export default async function ProjectDetailPage({
         <div className="grid md:grid-cols-2 gap-6">
           {/* About */}
           <Card className="overflow-hidden border border-border bg-card rounded-lg">
-            <div className="p-5 border-b border-border">
+            <div className="px-5 py-4 border-b border-border">
               <h2 className="font-bold text-lg flex items-center gap-2">
                 소개
               </h2>
             </div>
-            <div className="p-5">
+            <div className="p-4">
               <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                 {project.longDescription}
               </p>
@@ -105,13 +133,13 @@ export default async function ProjectDetailPage({
 
           {/* Features */}
           <Card className="overflow-hidden border border-border bg-card rounded-lg">
-            <div className="p-5 border-b border-border">
+            <div className="px-5 py-4 border-b border-border">
               <h2 className="font-bold text-lg flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />
                 주요 기능
               </h2>
             </div>
-            <div className="p-5">
+            <div className="p-4">
               <ul className="space-y-3">
                 {project.features.map((feature, index) => (
                   <li
@@ -131,13 +159,13 @@ export default async function ProjectDetailPage({
 
         {/* Tech Stack */}
         <Card className="overflow-hidden border border-border bg-card rounded-lg mt-6">
-          <div className="p-5 border-b border-border">
+          <div className="px-5 py-4 border-b border-border">
             <h2 className="font-bold text-lg flex items-center gap-2">
               <Layers className="w-4 h-4" />
               기술 스택
             </h2>
           </div>
-          <div className="p-5">
+          <div className="p-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {project.techStack.map((stack) => (
                 <div key={stack.category}>
@@ -160,22 +188,6 @@ export default async function ProjectDetailPage({
             </div>
           </div>
         </Card>
-
-        {/* Tags */}
-        <div className="mt-8 pt-6 border-t border-border flex flex-wrap items-center gap-2">
-          <span className="text-xs font-medium text-muted-foreground mr-2">
-            Tags:
-          </span>
-          {project.tags.map((tag) => (
-            <Badge
-              key={tag}
-              variant="outline"
-              className="text-xs rounded-md"
-            >
-              #{tag}
-            </Badge>
-          ))}
-        </div>
       </div>
     </div>
   );
