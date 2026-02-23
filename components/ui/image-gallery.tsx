@@ -44,7 +44,7 @@ export default function ImageGallery({
 
       <div
         className={cn(
-          "flex items-center gap-2 w-full max-w-5xl px-4",
+          "flex items-center gap-2 w-full max-w-5xl px-4 min-w-0",
           (title ?? description) && "mt-10",
           galleryHeight
         )}
@@ -52,7 +52,8 @@ export default function ImageGallery({
         {images.map((src, idx) => (
           <div
             key={`${idx}-${src}`}
-            className="relative group grow transition-all w-56 rounded-lg overflow-hidden h-full duration-500 hover:w-full"
+            tabIndex={0}
+            className="relative group grow basis-0 min-w-0 md:basis-56 rounded-lg overflow-hidden h-full transition-[flex-basis,width] duration-500 ease-in-out hover:w-full md:hover:basis-full focus-within:basis-[36%] md:focus-within:basis-full focus:outline-none"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

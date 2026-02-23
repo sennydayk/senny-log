@@ -32,7 +32,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {/* Main Container */}
-          <div className="w-full max-w-5xl mx-auto min-h-screen flex flex-col">
+          <div className="w-full max-w-5xl mx-auto min-h-screen flex flex-col overflow-x-hidden">
             
             {/* Top Bar */}
             <header className="h-14 border-b border-border flex items-center justify-between px-6 sticky top-0 z-50 bg-background/80 backdrop-blur-sm">

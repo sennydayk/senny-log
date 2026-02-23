@@ -106,8 +106,10 @@ export const RadialScrollGallery = forwardRef<
     );
     const [isMounted, setIsMounted] = useState(false);
 
-    const currentRadius = useResponsiveValue(baseRadius, mobileRadius);
+    // 레이아웃/애니메이션은 항상 baseRadius로 고정, 반응형에서는 scale만 축소
+    const currentRadius = baseRadius;
     const circleDiameter = currentRadius * 2;
+    const responsiveScale = useResponsiveValue(1, mobileRadius / baseRadius);
 
     const { visibleDecimal, hiddenDecimal } = useMemo(() => {
       const clamped = Math.max(10, Math.min(100, visiblePercentage));
@@ -143,6 +145,23 @@ export const RadialScrollGallery = forwardRef<
       observer.observe(childRef.current);
       return () => observer.disconnect();
     }, [childrenCount]);
+
+    // 반응형: 윈도우 리사이즈 시 ScrollTrigger 갱신 (breakpoint 외 레이아웃 변경 대응)
+    useEffect(() => {
+      if (typeof window === 'undefined') return;
+
+      let timeoutId: NodeJS.Timeout;
+      const handleResize = () => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => ScrollTrigger.refresh(), 150);
+      };
+
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        clearTimeout(timeoutId);
+      };
+    }, []);
 
     useGSAP(
       () => {
@@ -189,7 +208,6 @@ export const RadialScrollGallery = forwardRef<
         scope: pinRef,
         dependencies: [
           scrollDuration,
-          currentRadius,
           startTrigger,
           childrenCount,
         ],
@@ -217,13 +235,20 @@ export const RadialScrollGallery = forwardRef<
           className='relative w-full overflow-hidden'
           style={{
             height: `${visibleAreaHeight}px`,
-            maskImage:
-              'linear-gradient(to top, transparent 0%, black 40%, black 100%)',
-            WebkitMaskImage:
-              'linear-gradient(to top, transparent 0%, black 40%, black 100%)',
           }}
         >
-          <ul
+          <div
+            style={{
+              transform: `scale(${responsiveScale})`,
+              transformOrigin: 'top center',
+              height: '100%',
+              maskImage:
+                'linear-gradient(to top, transparent 0%, black 40%, black 100%)',
+              WebkitMaskImage:
+                'linear-gradient(to top, transparent 0%, black 40%, black 100%)',
+            }}
+          >
+            <ul
             ref={containerRef}
             className={`
               absolute left-1/2 -translate-x-1/2 will-change-transform m-0 p-0 list-none
@@ -296,6 +321,7 @@ export const RadialScrollGallery = forwardRef<
               );
             })}
           </ul>
+          </div>
         </div>
       </div>
     );

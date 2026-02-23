@@ -9,6 +9,7 @@ import {
   Code2,
   Figma,
   GitBranch,
+  BookOpen,
 } from "lucide-react";
 import ContactBalls from "./contact-balls";
 import { FlipText } from "./ui/flip-links";
@@ -40,18 +41,15 @@ function TabNavigation({
   onTabChange: (id: TabId) => void;
 }) {
   return (
-    <header className="relative z-10 pt-6 space-y-6">
-      {/* <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight">
-        Blog
-      </h1> */}
-      <nav>
-        <div className="flex items-center gap-1 border-b border-border">
+    <header className="relative z-10 pt-6 space-y-6 min-w-0">
+      <nav className="min-w-0">
+        <div className="flex items-center gap-0 sm:gap-1 border-b border-border min-w-0">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               className={`
-                px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap relative
+                px-2 py-2 text-xs sm:px-4 sm:py-2.5 sm:text-sm font-medium transition-colors whitespace-nowrap relative shrink-0
                 ${activeTab === tab.id
                   ? "text-foreground after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-foreground"
                   : "text-muted-foreground hover:text-foreground"
@@ -63,9 +61,11 @@ function TabNavigation({
           ))}
           <Link
             href="/blog"
-            className="ml-auto px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+            className="ml-auto shrink-0 flex items-center justify-center w-8 h-8 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 text-muted-foreground hover:text-foreground transition-colors rounded-md border border-transparent hover:bg-secondary sm:border-0 sm:bg-transparent"
+            aria-label="View Blog"
           >
-            View Blog
+            <BookOpen className="w-4 h-4 sm:hidden" />
+            <span className="hidden sm:inline text-sm font-medium">View Blog</span>
           </Link>
         </div>
       </nav>
