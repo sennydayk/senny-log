@@ -11,7 +11,6 @@ type BlogPostPageProps = {
 };
 
 export const dynamicParams = true; // 동적 라우트 허용
-export const revalidate = 3600; // 1시간마다 재검증
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;

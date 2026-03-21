@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { Client } from "@notionhq/client";
 import { NotionToMarkdown } from "notion-to-md";
 import type { BlogPost } from "./posts";
@@ -7,13 +8,9 @@ export type BlogPostMetadata = Omit<BlogPost, "content"> & {
   pageId?: string; // 노션 페이지 ID (slug 조회용)
 };
 
-// In-Memory 캐시
-const cache = {
-  metadata: null as BlogPostMetadata[] | null,
-  fullPosts: new Map<string, BlogPost>(),
-  lastFetch: 0,
-  CACHE_DURATION: 5 * 60 * 1000, // 5분
-};
+const NOTION_POSTS_TAG = "notion-posts";
+const METADATA_REVALIDATE_SECONDS = 600;
+const POST_REVALIDATE_SECONDS = 1800;
 
 function getNotionClient() {
   const apiKey = process.env.NOTION_API_KEY;
@@ -43,11 +40,43 @@ type NotionPage = {
   };
 };
 
-/**
- * 노션 데이터베이스에서 메타데이터만 가져오기 (content 제외)
- * 목록 페이지 등에서 사용
- */
-export async function getNotionPostsMetadata(): Promise<BlogPostMetadata[]> {
+type NotionQueryResponse = {
+  results: any[];
+  has_more: boolean;
+  next_cursor: string | null;
+};
+
+async function fetchAllDatabasePages(databaseId: string): Promise<NotionPage[]> {
+  try {
+    const notion = getNotionClient();
+    const pages: NotionPage[] = [];
+    let cursor: string | undefined;
+
+    do {
+      const response = (await notion.databases.query({
+        database_id: databaseId,
+        page_size: 100,
+        start_cursor: cursor,
+        sorts: [
+          {
+            property: "Date",
+            direction: "descending",
+          },
+        ],
+      })) as NotionQueryResponse;
+
+      pages.push(...response.results.map((page) => page as NotionPage));
+      cursor = response.has_more ? response.next_cursor ?? undefined : undefined;
+    } while (cursor);
+
+    return pages;
+  } catch (error: any) {
+    handleNotionQueryError(error, "노션 포스트 메타데이터 가져오기 실패:");
+    return [];
+  }
+}
+
+async function fetchNotionPostsMetadataUncached(): Promise<BlogPostMetadata[]> {
   const apiKey = process.env.NOTION_API_KEY;
   const databaseId = process.env.NOTION_DATABASE_ID;
 
@@ -55,47 +84,83 @@ export async function getNotionPostsMetadata(): Promise<BlogPostMetadata[]> {
     return [];
   }
 
-  // 캐시 확인
-  const now = Date.now();
-  if (cache.metadata && now - cache.lastFetch < cache.CACHE_DURATION) {
-    return cache.metadata;
+  const pages = await fetchAllDatabasePages(databaseId);
+  const posts = pages.map((page) => notionPageToMetadata(page));
+
+  return posts.filter(
+    (post: BlogPostMetadata | null): post is BlogPostMetadata => post !== null
+  );
+}
+
+const getCachedNotionPostsMetadata = unstable_cache(
+  fetchNotionPostsMetadataUncached,
+  ["notion-posts-metadata"],
+  {
+    revalidate: METADATA_REVALIDATE_SECONDS,
+    tags: [NOTION_POSTS_TAG],
+  }
+);
+
+async function fetchNotionPostBySlugUncached(slug: string): Promise<BlogPost | null> {
+  const apiKey = process.env.NOTION_API_KEY;
+  const databaseId = process.env.NOTION_DATABASE_ID;
+
+  if (!apiKey || !databaseId) {
+    return null;
   }
 
   try {
-    const notion = getNotionClient();
+    const metadata = await getCachedNotionPostsMetadata();
+    const postMeta = metadata.find((post) => post.slug === slug);
 
-    const response = await notion.databases.query({
-      database_id: databaseId,
-    });
-
-    const posts = response.results.map((page: any) =>
-      notionPageToMetadata(page as NotionPage)
-    );
-
-    const validPosts = posts.filter(
-      (post: BlogPostMetadata | null): post is BlogPostMetadata => post !== null
-    );
-
-    // 캐시 업데이트
-    cache.metadata = validPosts;
-    cache.lastFetch = now;
-
-    return validPosts;
-  } catch (error: any) {
-    if (
-      error?.code === "validation_error" &&
-      error?.message?.includes("is a page, not a database")
-    ) {
-      console.error(
-        "\n❌ 오류: 제공된 ID는 페이지 ID입니다. 데이터베이스 ID를 입력해주세요."
-      );
-      console.error("💡 데이터베이스 뷰 URL에서 32자리 ID를 복사하세요.");
-      console.error("   예: https://notion.so/DATABASE_ID?v=...\n");
-    } else {
-      console.error("노션 포스트 메타데이터 가져오기 실패:", error);
+    if (!postMeta?.pageId) {
+      return null;
     }
-    return [];
+
+    const notion = getNotionClient();
+    const n2m = new NotionToMarkdown({ notionClient: notion });
+    const page = await notion.pages.retrieve({ page_id: postMeta.pageId });
+
+    return notionPageToBlogPost(page as unknown as NotionPage, n2m);
+  } catch (error) {
+    console.error(`포스트 가져오기 실패 (slug: ${slug}):`, error);
+    return null;
   }
+}
+
+function getCachedNotionPostBySlug(slug: string): Promise<BlogPost | null> {
+  return unstable_cache(
+    () => fetchNotionPostBySlugUncached(slug),
+    ["notion-post", slug],
+    {
+      revalidate: POST_REVALIDATE_SECONDS,
+      tags: [NOTION_POSTS_TAG, `notion-post:${slug}`],
+    }
+  )();
+}
+
+function handleNotionQueryError(error: any, message: string) {
+  if (
+    error?.code === "validation_error" &&
+    error?.message?.includes("is a page, not a database")
+  ) {
+    console.error(
+      "\n❌ 오류: 제공된 ID는 페이지 ID입니다. 데이터베이스 ID를 입력해주세요."
+    );
+    console.error("💡 데이터베이스 뷰 URL에서 32자리 ID를 복사하세요.");
+    console.error("   예: https://notion.so/DATABASE_ID?v=...\n");
+    return;
+  }
+
+  console.error(message, error);
+}
+
+/**
+ * 노션 데이터베이스에서 메타데이터만 가져오기 (content 제외)
+ * 목록 페이지 등에서 사용
+ */
+export async function getNotionPostsMetadata(): Promise<BlogPostMetadata[]> {
+  return getCachedNotionPostsMetadata();
 }
 
 /**
@@ -103,24 +168,23 @@ export async function getNotionPostsMetadata(): Promise<BlogPostMetadata[]> {
  * @deprecated getNotionPostsMetadata()와 getNotionPostBySlug()를 사용하세요
  */
 export async function getNotionPosts(): Promise<BlogPost[]> {
-  const apiKey = process.env.NOTION_API_KEY;
-  const databaseId = process.env.NOTION_DATABASE_ID;
-
-  if (!apiKey || !databaseId) {
-    return [];
-  }
-
   try {
+    const metadata = await getNotionPostsMetadata();
+
+    if (metadata.length === 0) {
+      return [];
+    }
+
     const notion = getNotionClient();
     const n2m = new NotionToMarkdown({ notionClient: notion });
 
-    const response = await notion.databases.query({
-      database_id: databaseId,
-    });
-
     const posts = await Promise.all(
-      response.results.map((page: any) =>
-        notionPageToBlogPost(page as NotionPage, n2m)
+      metadata.map((post) =>
+        post.pageId
+          ? notion.pages
+              .retrieve({ page_id: post.pageId })
+              .then((page) => notionPageToBlogPost(page as unknown as NotionPage, n2m))
+          : Promise.resolve(null)
       )
     );
 
@@ -128,18 +192,7 @@ export async function getNotionPosts(): Promise<BlogPost[]> {
       (post: BlogPost | null): post is BlogPost => post !== null
     );
   } catch (error: any) {
-    if (
-      error?.code === "validation_error" &&
-      error?.message?.includes("is a page, not a database")
-    ) {
-      console.error(
-        "\n❌ 오류: 제공된 ID는 페이지 ID입니다. 데이터베이스 ID를 입력해주세요."
-      );
-      console.error("💡 데이터베이스 뷰 URL에서 32자리 ID를 복사하세요.");
-      console.error("   예: https://notion.so/DATABASE_ID?v=...\n");
-    } else {
-      console.error("노션 포스트 가져오기 실패:", error);
-    }
+    handleNotionQueryError(error, "노션 포스트 가져오기 실패:");
     return [];
   }
 }
@@ -150,44 +203,7 @@ export async function getNotionPosts(): Promise<BlogPost[]> {
 export async function getNotionPostBySlug(
   slug: string
 ): Promise<BlogPost | null> {
-  const apiKey = process.env.NOTION_API_KEY;
-  const databaseId = process.env.NOTION_DATABASE_ID;
-
-  if (!apiKey || !databaseId) {
-    return null;
-  }
-
-  // 캐시에서 먼저 확인
-  if (cache.fullPosts.has(slug)) {
-    return cache.fullPosts.get(slug)!;
-  }
-
-  try {
-    // 메타데이터에서 해당 slug의 페이지 ID 찾기
-    const metadata = await getNotionPostsMetadata();
-    const postMeta = metadata.find((p) => p.slug === slug);
-
-    if (!postMeta || !postMeta.pageId) {
-      return null;
-    }
-
-    // 해당 포스트만 전체 콘텐츠로 변환
-    const notion = getNotionClient();
-    const n2m = new NotionToMarkdown({ notionClient: notion });
-
-    const page = await notion.pages.retrieve({ page_id: postMeta.pageId });
-    const fullPost = await notionPageToBlogPost(page as any as NotionPage, n2m);
-
-    if (fullPost) {
-      // 캐시에 저장
-      cache.fullPosts.set(slug, fullPost);
-    }
-
-    return fullPost;
-  } catch (error) {
-    console.error(`포스트 가져오기 실패 (slug: ${slug}):`, error);
-    return null;
-  }
+  return getCachedNotionPostBySlug(slug);
 }
 
 /**
