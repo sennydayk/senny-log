@@ -40,6 +40,18 @@ type NotionPage = {
   };
 };
 
+function getPageCoverUrl(page: NotionPage): string {
+  if (page.cover?.external?.url) {
+    return page.cover.external.url;
+  }
+
+  if (page.cover?.file?.url) {
+    return `/api/notion-image/${page.id}`;
+  }
+
+  return "/placeholder.svg";
+}
+
 type NotionQueryResponse = {
   results: any[];
   has_more: boolean;
@@ -273,8 +285,7 @@ function notionPageToMetadata(page: NotionPage): BlogPostMetadata | null {
         : "";
 
     // 썸네일 (커버 이미지만 사용, 본문 이미지는 content 변환 없이 불가능)
-    const thumbnail =
-      page.cover?.file?.url || page.cover?.external?.url || "/placeholder.svg";
+    const thumbnail = getPageCoverUrl(page);
 
     return {
       slug,
@@ -367,10 +378,10 @@ async function notionPageToBlogPost(
     const content = n2m.toMarkdownString(mdblocks).parent;
 
     // 썸네일 (우선순위: 커버 이미지 > 본문 첫 이미지 > 기본 이미지)
-    let thumbnail = page.cover?.file?.url || page.cover?.external?.url || null;
+    let thumbnail = getPageCoverUrl(page);
 
     // 커버 이미지가 없으면 본문에서 첫 번째 이미지 찾기
-    if (!thumbnail) {
+    if (thumbnail === "/placeholder.svg") {
       const imageMatch = content.match(/!\[.*?\]\((https?:\/\/[^\)]+)\)/);
       thumbnail = imageMatch ? imageMatch[1] : "/placeholder.svg";
     }
