@@ -124,16 +124,21 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
             </code>
           );
         },
-        img: ({ src, alt }) => (
-          <span className="block my-6 relative w-full aspect-video rounded-lg overflow-hidden bg-muted">
-            <Image
-              src={src || "/placeholder.svg"}
-              alt={alt || ""}
-              fill
-              className="object-cover"
-            />
-          </span>
-        ),
+        img: ({ src, alt }) => {
+          const imageSrc = typeof src === "string" ? src : "/placeholder.svg";
+
+          return (
+            <span className="block my-6 relative w-full aspect-video rounded-lg overflow-hidden bg-muted">
+              <Image
+                src={imageSrc}
+                alt={alt || ""}
+                fill
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-cover"
+              />
+            </span>
+          );
+        },
         ul: ({ children }) => (
           <ul className="list-disc list-inside mb-4 space-y-2 text-card-foreground font-sans">
             {children}

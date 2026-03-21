@@ -50,7 +50,7 @@ export default function ProjectsPage() {
             >
               <Card className="h-full overflow-hidden border border-border bg-card hover:bg-secondary/50 transition-all duration-200 rounded-lg group-hover:-translate-y-0.5 flex flex-col">
                 {/* Thumbnail - 상단 직사각형 영역 */}
-                <div className="w-full aspect-16/10 min-h-[140px] relative bg-secondary flex items-center justify-center border-b border-border shrink-0 overflow-hidden">
+                <div className="w-full aspect-[16/10] min-h-[140px] relative bg-secondary flex items-center justify-center border-b border-border shrink-0 overflow-hidden">
                   <Image
                     src={project.thumbnail}
                     alt={project.title}

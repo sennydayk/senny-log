@@ -9,7 +9,8 @@
   "scripts": {
     "pr": "node .sisyphus/command-runner.js pr",
     "blog": "node .sisyphus/command-runner.js blog",
-    "deploy": "node .sisyphus/command-runner.js deploy"
+    "deploy": "node .sisyphus/command-runner.js deploy",
+    "release": "node .sisyphus/command-runner.js release"
   },
   "dependencies": {
     "commander": "^11.0.0"

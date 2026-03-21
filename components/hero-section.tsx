@@ -86,6 +86,7 @@ function ProfileCard() {
                   src="/profile.png"
                   alt="Profile"
                   fill
+                  sizes="96px"
                   className="object-cover"
                   priority
                 />

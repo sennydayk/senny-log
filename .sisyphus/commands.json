@@ -14,6 +14,10 @@
       "description": "Deploy to production",
       "script": "scripts/deploy.js"
     },
+    "release": {
+      "description": "Build, commit, and push changes on main",
+      "script": "scripts/release.js"
+    },
     "component": {
       "description": "Create React component with tests and stories",
       "script": "scripts/create-component.js"

@@ -26,6 +26,16 @@ Builds and deploys the application to production.
 /deploy
 ```
 
+### `/release` - Build, Commit, and Push to Main
+Builds the app, generates a commit message from the current diff, commits with the GitHub noreply author, and pushes to `main`.
+
+**Usage:**
+```
+/release
+/release message="🐛 노션 썸네일 표시 수정"
+/release dry_run=true
+```
+
 ## Adding New Commands
 
 1. Add command to `.sisyphus/commands.json`

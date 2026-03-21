@@ -137,6 +137,7 @@ export function BlogList({ posts, categories }: BlogListProps) {
                               src={post.thumbnail}
                               alt={post.title}
                               fill
+                              sizes="(max-width: 767px) 112px, 160px"
                               className="object-cover transition-transform duration-300 group-hover:scale-105"
                             />
                           </div>

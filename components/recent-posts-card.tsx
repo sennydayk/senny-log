@@ -19,7 +19,7 @@ export default function RecentPostsCard({ posts = [] }: RecentPostsCardProps) {
               No posts yet...
            </div>
         ) : (
-           posts.map((post) => (
+           posts.map((post, index) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
@@ -27,11 +27,13 @@ export default function RecentPostsCard({ posts = [] }: RecentPostsCardProps) {
           >
             <Card className="h-full overflow-hidden border border-border bg-card hover:bg-secondary/50 transition-all duration-200 rounded-lg group-hover:-translate-y-0.5">
               {/* Thumbnail */}
-              <div className="relative aspect-16/10 bg-secondary overflow-hidden">
+              <div className="relative aspect-[16/10] bg-secondary overflow-hidden">
                 <Image
                   src={post.thumbnail}
                   alt={post.title}
                   fill
+                  sizes="(max-width: 767px) 100vw, 33vw"
+                  priority={index === 0}
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute top-3 left-3">
