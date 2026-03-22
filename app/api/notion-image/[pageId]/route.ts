@@ -35,11 +35,30 @@ export async function GET(
       return NextResponse.redirect(new URL("/placeholder.svg", request.url));
     }
 
-    return NextResponse.redirect(imageUrl, {
-      headers: {
-        "Cache-Control": "public, s-maxage=1800, stale-while-revalidate=3600",
-      },
+    const imageResponse = await fetch(imageUrl, {
+      cache: "no-store",
     });
+
+    if (!imageResponse.ok || !imageResponse.body) {
+      return NextResponse.redirect(new URL("/placeholder.svg", request.url));
+    }
+
+    const headers = new Headers();
+    headers.set(
+      "Content-Type",
+      imageResponse.headers.get("Content-Type") || "image/jpeg"
+    );
+    headers.set(
+      "Cache-Control",
+      "public, s-maxage=1800, stale-while-revalidate=3600"
+    );
+
+    const contentLength = imageResponse.headers.get("Content-Length");
+    if (contentLength) {
+      headers.set("Content-Length", contentLength);
+    }
+
+    return new NextResponse(imageResponse.body, { headers });
   } catch (error) {
     console.error("노션 썸네일 가져오기 실패:", error);
     return NextResponse.redirect(new URL("/placeholder.svg", request.url));
